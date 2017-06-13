@@ -21,16 +21,14 @@ public class BateriaEstatica {
     public static final String CARGA_USB = "USB";
     public static final String CARGA_AC = "AC";
 
-    //Nivel de bateria para considerar que el dispositivo tiene bateria baja
-    private int nivelMin = 40;//Modificar si es necesario
-    private int nivelActual;
+    private int nivelActual = 0;
 
     private boolean bateriaBaja = false;
     private boolean cargando = false;
     private String fuenteCarga = "NO_CARGA";
 
-    Intent statusBateria;
-    IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+    private Intent statusBateria;
+    private IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
 
     public BateriaEstatica(Context context){
         actualizaInformacion(context);

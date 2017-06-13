@@ -7,10 +7,9 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.example.saul_wm.bateria.Bateria.BateriaDinamica;
-import com.example.saul_wm.bateria.Telefono.Telefono;
+import com.example.saul_wm.bateria.Telefono.HistorialLlamadas;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -23,23 +22,24 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initComponents();
 
-        BateriaDinamica batDinamica = new BateriaDinamica(this);
+        //BateriaDinamica batDinamica = new BateriaDinamica(this);
+        //batDinamica.iniciaRegistro();
 
+        Activity act = this;
+        HistorialLlamadas historialLlamadas = new HistorialLlamadas(act);
 
-       /* Activity act = this;
-        Telefono tel = new Telefono(act);
-        tel.getCallDetails();
-        ArrayList<HashMap<String,String>> llamadas = tel.getLlamadas();
+        ArrayList<String[]> llamadas =  historialLlamadas.getHistorial();
 
         String aux = "";
-        for (HashMap<String, String> llamada : llamadas) {
-            aux += "-----------------------------------------------";
-            aux += "Numero " + llamada.get("NumTel") + "\n";
-            aux += "Fecha Llamada " + llamada.get("FechaLlamada") + "\n" ;
-            aux += "Duracion Llamada " + llamada.get("DuracionLlamada") + "\n" ;
+        for (String[] llamada : llamadas) {
+            aux += "-----------------------------------------------\n";
+            aux += "Numero " + llamada[0] + "\n";
+            aux += "Fecha Llamada " + llamada[1] + "\n" ;
+            aux += "Duracion Llamada " + llamada[2] + "\n" ;
+            aux += "Tipo de llamada " + llamada[3] + "\n";
         }
 
-        Log.d("Llamada", aux);*/
+        Log.d("Llamada", aux);
     }
 
     private void initComponents(){

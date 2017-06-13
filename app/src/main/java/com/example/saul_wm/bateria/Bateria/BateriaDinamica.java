@@ -40,13 +40,16 @@ public class BateriaDinamica extends BroadcastReceiver{
 
     public BateriaDinamica(Context context){
         this.context = context;
+    }
+
+    public void iniciaRegistro(){
         context.registerReceiver(this, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         //Agregar alguna de las funciones para disparar eventos
-        //eventoPorcBat(intent);
+        eventoPorcBat(intent);
         //eventoBatMin(intent);
         //eventoCambioCarga(intent);
     }

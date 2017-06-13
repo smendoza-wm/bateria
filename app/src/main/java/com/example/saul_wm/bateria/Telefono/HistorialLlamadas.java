@@ -13,17 +13,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Telefono {
-    private String numTelefono;
+public class HistorialLlamadas {
 
-    private ArrayList<HashMap<String, String>> llamadas = new ArrayList<>();
+
+    private ArrayList<String[]> llamadas = new ArrayList<>();
     private Activity activity;
 
-    public Telefono(Activity act) {
+    public HistorialLlamadas(Activity act) {
         this.activity = act;
+        getHistorialLlamadas();
     }
 
-    public void getCallDetails() {
+    private void getHistorialLlamadas() {
 
 
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
@@ -45,22 +46,22 @@ public class Telefono {
 
 
             while (managedCursor.moveToNext()) {
-                HashMap<String, String> llamada = new HashMap<>();
-                llamada.put("NumTel", managedCursor.getString(number));
-                llamada.put("FechaLlamada", (new Date(Long.valueOf(managedCursor.getString(date))) + ""));
-                llamada.put("DuracionLlamada", managedCursor.getString(duration));
+                String [] llamada = new String[4];
+                llamada[0] =  managedCursor.getString(number);
+                llamada[1] = (new Date(Long.valueOf(managedCursor.getString(date))) + "");
+                llamada[2] =  managedCursor.getString(duration);
                 int dircode = Integer.parseInt(managedCursor.getString(type));
                 switch (dircode) {
                     case CallLog.Calls.OUTGOING_TYPE:
-                        llamada.put("TipoLlamada", "Saliente");
+                        llamada[3] = "Saliente";
                         break;
 
                     case CallLog.Calls.INCOMING_TYPE:
-                        llamada.put("TipoLlamada", "Entrante");
+                        llamada[3] =  "Entrante";
                         break;
 
                     case CallLog.Calls.MISSED_TYPE:
-                        llamada.put("TipoLlamada", "Perdida");
+                        llamada[3] =  "Perdida";
                         break;
                 }
                 llamadas.add(llamada);
@@ -69,7 +70,7 @@ public class Telefono {
        }
     }
 
-    public ArrayList<HashMap<String,String>> getLlamadas(){
+    public ArrayList<String[]> getHistorial(){
         return this.llamadas;
     }
 
