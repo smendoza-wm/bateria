@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.example.saul_wm.bateria.Bateria.BateriaDinamica;
 import com.example.saul_wm.bateria.Telefono.Telefono;
 
 import java.util.ArrayList;
@@ -22,7 +23,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initComponents();
 
-        Activity act = this;
+        BateriaDinamica batDinamica = new BateriaDinamica(this);
+
+
+       /* Activity act = this;
         Telefono tel = new Telefono(act);
         tel.getCallDetails();
         ArrayList<HashMap<String,String>> llamadas = tel.getLlamadas();
@@ -35,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             aux += "Duracion Llamada " + llamada.get("DuracionLlamada") + "\n" ;
         }
 
-        Log.d("Llamada", aux);
+        Log.d("Llamada", aux);*/
     }
 
     private void initComponents(){
