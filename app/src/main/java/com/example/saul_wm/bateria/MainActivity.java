@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.example.saul_wm.bateria.Bateria.BateriaDinamica;
+import com.example.saul_wm.bateria.Localizacion.GPS;
 import com.example.saul_wm.bateria.Movimiento.Acelerometro;
 import com.example.saul_wm.bateria.Movimiento.ContadorPasos;
 import com.example.saul_wm.bateria.Movimiento.Orientacion;
@@ -55,8 +56,11 @@ public class MainActivity extends AppCompatActivity {
         //Orientacion orientacion = new Orientacion(this);
         //orientacion.iniciar();
 
-        ContadorPasos contadorPasos = new ContadorPasos(this, aceleracionX);
-        contadorPasos.iniciar();
+        //ContadorPasos contadorPasos = new ContadorPasos(this, aceleracionX);
+        //contadorPasos.iniciar();
+
+        GPS gps = new GPS(this, this, aceleracionX, aceleracionY);
+        gps.inicia();
 
     }
 

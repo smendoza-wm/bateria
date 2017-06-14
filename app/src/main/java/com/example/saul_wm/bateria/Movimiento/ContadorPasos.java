@@ -9,11 +9,10 @@ import android.widget.TextView;
 public class ContadorPasos extends SensorMovimiento {
 
     private int pasos = 0;
-    private int pasosAnteriores = 0;
 
     private Sensor contadorPasos;
 
-    TextView tv;
+    private TextView tv;
 
     public ContadorPasos(Context context, TextView tv){
         super(context);
@@ -36,7 +35,6 @@ public class ContadorPasos extends SensorMovimiento {
     public void onSensorChanged(SensorEvent event) {
         if(event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR){
             pasos++;
-            // Calculate steps taken based on first counter value received.
 
             tv.setText(pasos + "");
         }
