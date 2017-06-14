@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.example.saul_wm.bateria.Bateria.BateriaDinamica;
 import com.example.saul_wm.bateria.Movimiento.Acelerometro;
+import com.example.saul_wm.bateria.Movimiento.ContadorPasos;
 import com.example.saul_wm.bateria.Movimiento.Orientacion;
 import com.example.saul_wm.bateria.Telefono.HistorialLlamadas;
 
@@ -51,9 +52,11 @@ public class MainActivity extends AppCompatActivity {
         //Acelerometro acelerometro = new Acelerometro(this, aceleracionX, aceleracionY, aceleracionZ);
         //acelerometro.activar();
 
-        Orientacion orientacion = new Orientacion(this);
-        orientacion.iniciar();
+        //Orientacion orientacion = new Orientacion(this);
+        //orientacion.iniciar();
 
+        ContadorPasos contadorPasos = new ContadorPasos(this, aceleracionX);
+        contadorPasos.iniciar();
 
     }
 

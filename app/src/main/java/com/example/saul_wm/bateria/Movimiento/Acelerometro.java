@@ -25,7 +25,6 @@ public class Acelerometro implements SensorEventListener{
 
     private long tiempoAnterior;
 
-    private Context context;
     private SensorManager sensorManager;
     private Sensor acelerometro;
 
@@ -36,7 +35,6 @@ public class Acelerometro implements SensorEventListener{
     public Acelerometro(Context context, TextView x, TextView y, TextView z){
         sensorManager = (SensorManager) context.getSystemService(context.SENSOR_SERVICE);
         acelerometro = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-        this.context = context;
         this.x = x;
         this.y = y;
         this.z = z;
