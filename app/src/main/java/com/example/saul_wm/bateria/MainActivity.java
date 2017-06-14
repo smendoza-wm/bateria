@@ -7,7 +7,10 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.example.saul_wm.bateria.Bateria.BateriaDinamica;
+import com.example.saul_wm.bateria.Movimiento.Acelerometro;
 import com.example.saul_wm.bateria.Telefono.HistorialLlamadas;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -15,6 +18,9 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     TextView tv_nivelBateria;
+    TextView aceleracionX;
+    TextView aceleracionY;
+    TextView aceleracionZ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         //BateriaDinamica batDinamica = new BateriaDinamica(this);
         //batDinamica.iniciaRegistro();
 
-        Activity act = this;
+        /*Activity act = this;
         HistorialLlamadas historialLlamadas = new HistorialLlamadas(act);
 
         ArrayList<String[]> llamadas =  historialLlamadas.getHistorial();
@@ -39,11 +45,19 @@ public class MainActivity extends AppCompatActivity {
             aux += "Tipo de llamada " + llamada[3] + "\n";
         }
 
-        Log.d("Llamada", aux);
+        Log.d("Llamada", aux);*/
+
+        Acelerometro acelerometro = new Acelerometro(this, aceleracionX, aceleracionY, aceleracionZ);
+        acelerometro.activar();
+
+
     }
 
     private void initComponents(){
-        tv_nivelBateria = (TextView) findViewById(R.id.tv_nivelBateria);
+       // tv_nivelBateria = (TextView) findViewById(R.id.tv_nivelBateria);
+        aceleracionX = (TextView) findViewById(R.id.et_aceleracionX);
+        aceleracionY = (TextView) findViewById(R.id.et_aceleracionY);
+        aceleracionZ = (TextView) findViewById(R.id.et_aceleracionZ);
     }
 }
 

@@ -42,8 +42,12 @@ public class BateriaDinamica extends BroadcastReceiver{
         this.context = context;
     }
 
-    public void iniciaRegistro(){
+    public void iniciarRegistro(){
         context.registerReceiver(this, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+    }
+
+    public void detenerRegistro(){
+        context.unregisterReceiver(this);
     }
 
     @Override
