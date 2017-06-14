@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.example.saul_wm.bateria.Bateria.BateriaDinamica;
 import com.example.saul_wm.bateria.Movimiento.Acelerometro;
+import com.example.saul_wm.bateria.Movimiento.Orientacion;
 import com.example.saul_wm.bateria.Telefono.HistorialLlamadas;
 
 import org.w3c.dom.Text;
@@ -47,8 +48,11 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("Llamada", aux);*/
 
-        Acelerometro acelerometro = new Acelerometro(this, aceleracionX, aceleracionY, aceleracionZ);
-        acelerometro.activar();
+        //Acelerometro acelerometro = new Acelerometro(this, aceleracionX, aceleracionY, aceleracionZ);
+        //acelerometro.activar();
+
+        Orientacion orientacion = new Orientacion(this);
+        orientacion.iniciar();
 
 
     }
@@ -60,44 +64,3 @@ public class MainActivity extends AppCompatActivity {
         aceleracionZ = (TextView) findViewById(R.id.et_aceleracionZ);
     }
 }
-
-
- /* initComponents();
-        ActivityManager am = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
-        List l = am.getRunningServices(10);
-        Iterator i = l.iterator();
-        PackageManager pm = this.getPackageManager();
-        while (i.hasNext()) {
-            ActivityManager.RunningAppProcessInfo info = (ActivityManager.RunningAppProcessInfo)(i.next());
-            try {
-                CharSequence c = pm.getApplicationLabel(pm.getApplicationInfo(
-                        info.processName, PackageManager.GET_META_DATA));
-                Log.w("LABEL", c.toString());
-            } catch (Exception e) {
-                // Name Not FOund Exception
-            }
-        }
-
-       // BateriaDinamica bateria = new BateriaDinamica(this);
-        //tv_nivelBateria.setText(""+bateria.getNivelActual());
-
-       /* if(bateria.esBateriaBaja()){
-            Log.d("Nivel de bateria", "Bajo");
-        }
-        else
-            Log.d("Nivel de bateria", "Por encima del minimo");
-
-        if(bateria.estaCargando()){
-            Log.d("Carga", "Esta cargando");
-            if(bateria.getFuenteCarga().equals(BateriaDinamica.CARGA_USB))
-                Log.d("Carga", "Por usb");
-            else if(bateria.getFuenteCarga().equals(BateriaDinamica.CARGA_AC))
-                Toast.makeText(this, "Mediante AC", Toast.LENGTH_LONG).show();
-        }
-        else {
-            Toast.makeText(this, "Carga No esta cargando", Toast.LENGTH_LONG).show();
-        }
-
-
-       /* Bateria bateria = new Bateria(getApplicationContext(), tv_nivelBateria);
-        tv_nivelBateria.setText(""+bateria.getNivelActual());*/
