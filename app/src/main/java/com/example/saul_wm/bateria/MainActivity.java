@@ -1,17 +1,20 @@
 package com.example.saul_wm.bateria;
 
 import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.example.saul_wm.bateria.BaseDatos.BaseDatos;
 import com.example.saul_wm.bateria.Bateria.BateriaDinamica;
 import com.example.saul_wm.bateria.Localizacion.GPS;
 import com.example.saul_wm.bateria.Movimiento.Acelerometro;
 import com.example.saul_wm.bateria.Movimiento.ContadorPasos;
 import com.example.saul_wm.bateria.Movimiento.Orientacion;
 import com.example.saul_wm.bateria.Telefono.HistorialLlamadas;
+import com.example.saul_wm.bateria.Utils.Constantes;
 
 import org.w3c.dom.Text;
 
@@ -25,14 +28,20 @@ public class MainActivity extends AppCompatActivity {
     TextView aceleracionY;
     TextView aceleracionZ;
 
+    private SQLiteDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initComponents();
 
-        //BateriaDinamica batDinamica = new BateriaDinamica(this);
-        //batDinamica.iniciaRegistro();
+
+
+
+
+        BateriaDinamica batDinamica = new BateriaDinamica(this);
+        batDinamica.iniciarRegistro();
 
         /*Activity act = this;
         HistorialLlamadas historialLlamadas = new HistorialLlamadas(act);
@@ -59,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
         //ContadorPasos contadorPasos = new ContadorPasos(this, aceleracionX);
         //contadorPasos.iniciar();
 
-        GPS gps = new GPS(this, this, aceleracionX, aceleracionY);
-        gps.inicia();
+        //GPS gps = new GPS(this, this, aceleracionX, aceleracionY);
+        //gps.inicia();
 
     }
 

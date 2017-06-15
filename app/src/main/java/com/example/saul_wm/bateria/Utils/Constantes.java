@@ -8,6 +8,9 @@ public final class Constantes {
     public static final long TIEMPO_MIN_ACTUALIZACION_GPS = 30000;
     public static final long DISTANCIA_MIN_ACTUALIZACION_GPS = 10;
 
+    public static final int VERSION_BD = 1;
+    public static final String NOMBRE_BD = "Base_Bateria";
+
 
     float SHAKE_THRESHOLD = (float) 6.5E-8;
 }
