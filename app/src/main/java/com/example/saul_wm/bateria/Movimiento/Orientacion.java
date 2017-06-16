@@ -5,6 +5,9 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 public class Orientacion implements SensorEventListener{
 
@@ -18,10 +21,19 @@ public class Orientacion implements SensorEventListener{
 
     private long tiempoAnterior = 0;
 
-    public Orientacion(Context context){
+    private TextView tv1;
+    private TextView tv2;
+    private TextView tv3;
+
+
+    public Orientacion(Context context, TextView tv1, TextView tv2, TextView tv3){
         sensorManager = (SensorManager)context.getSystemService(context.SENSOR_SERVICE);
         acelerometro = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometro = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        this.tv1 = tv1;
+        this.tv2 = tv2;
+        this.tv3 = tv3;
+
     }
 
     public void iniciar(){
@@ -47,7 +59,7 @@ public class Orientacion implements SensorEventListener{
 
                 long tiempoActual = System.currentTimeMillis();
 
-                if ((tiempoActual - tiempoAnterior) > 1000) { //Si han pasado 'n' segundos
+                if ((tiempoActual - tiempoAnterior) > 500) { //Si han pasado 'n' segundos
                     tiempoAnterior = tiempoActual;
                     float orientation[] = new float[3];
                     SensorManager.getOrientation(R, orientation);
@@ -57,6 +69,10 @@ public class Orientacion implements SensorEventListener{
                     System.out.println("Pitch: " + orientation[1]);
                     System.out.println("Roll: " + orientation[2]);
                     System.out.println("***********************************************");
+
+                    tv1.setText(orientation[0]+"");
+                    tv2.setText(orientation[1]+"");
+                    tv3.setText(orientation[2]+"");
                 }
             }
         }

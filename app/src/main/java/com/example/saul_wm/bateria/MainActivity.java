@@ -1,34 +1,11 @@
 package com.example.saul_wm.bateria;
 
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.IntentService;
-import android.content.Context;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
-import com.example.saul_wm.bateria.BaseDatos.BaseDatos;
-import com.example.saul_wm.bateria.Bateria.BateriaDinamica;
-import com.example.saul_wm.bateria.Localizacion.GPS;
-import com.example.saul_wm.bateria.Movimiento.Acelerometro;
-import com.example.saul_wm.bateria.Movimiento.ContadorPasos;
-import com.example.saul_wm.bateria.Movimiento.Orientacion;
-import com.example.saul_wm.bateria.Servicios.AplicacionesActivas;
-import com.example.saul_wm.bateria.Telefono.HistorialLlamadas;
-import com.example.saul_wm.bateria.Utils.Constantes;
-import com.jaredrummler.android.processes.ProcessManager;
-import com.jaredrummler.android.processes.models.AndroidAppProcess;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.example.saul_wm.bateria.Telefono.HistorialMjs;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,8 +23,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initComponents();
 
-        startService(new Intent(this, AplicacionesActivas.class));
+        HistorialMjs historialMjs = new HistorialMjs(this);
+        historialMjs.getHistorial();
 
+        //startService(new Intent(this, AplicacionesActivas.class));
 
         //BateriaDinamica batDinamica = new BateriaDinamica(this);
         //batDinamica.iniciarRegistro();
@@ -71,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         //Acelerometro acelerometro = new Acelerometro(this, aceleracionX, aceleracionY, aceleracionZ);
         //acelerometro.activar();
 
-        //Orientacion orientacion = new Orientacion(this);
+       // Orientacion orientacion = new Orientacion(this, aceleracionX, aceleracionY, aceleracionZ);
         //orientacion.iniciar();
 
         //ContadorPasos contadorPasos = new ContadorPasos(this, aceleracionX);
