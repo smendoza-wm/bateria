@@ -28,23 +28,25 @@ public class Acelerometro implements SensorEventListener{
     private SensorManager sensorManager;
     private Sensor acelerometro;
 
-    private TextView x;
-    private TextView y;
-    private TextView z;
+    private EditText x;
+    private EditText y;
+    private EditText z;
+    private EditText promedio;
 
-    public Acelerometro(Context context, TextView x, TextView y, TextView z){
+    public Acelerometro(Context context, EditText x, EditText y, EditText z, EditText promedio){
         sensorManager = (SensorManager) context.getSystemService(context.SENSOR_SERVICE);
         acelerometro = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         this.x = x;
         this.y = y;
         this.z = z;
+        this.promedio = promedio;
     }
 
-    public void activar(){
+    public void iniciar(){
         sensorManager.registerListener(this, acelerometro, SensorManager.SENSOR_DELAY_UI);
     }
 
-    public void desactivar(){
+    public void detener(){
         sensorManager.unregisterListener(this);
     }
 
@@ -81,6 +83,8 @@ public class Acelerometro implements SensorEventListener{
                 ultAcelY = acelY;
                 ultAcelZ = acelZ;
 
+                float promedio = ( Math.abs(acelX) + Math.abs(acelY) + Math.abs(acelZ) ) / 3;
+                this.promedio.setText(promedio + "");
             }
         }
     }

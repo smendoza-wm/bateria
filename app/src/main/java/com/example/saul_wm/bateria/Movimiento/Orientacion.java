@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -21,12 +22,12 @@ public class Orientacion implements SensorEventListener{
 
     private long tiempoAnterior = 0;
 
-    private TextView tv1;
-    private TextView tv2;
-    private TextView tv3;
+    private EditText tv1;
+    private EditText tv2;
+    private EditText tv3;
 
 
-    public Orientacion(Context context, TextView tv1, TextView tv2, TextView tv3){
+    public Orientacion(Context context, EditText tv1, EditText tv2, EditText tv3){
         sensorManager = (SensorManager)context.getSystemService(context.SENSOR_SERVICE);
         acelerometro = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometro = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);

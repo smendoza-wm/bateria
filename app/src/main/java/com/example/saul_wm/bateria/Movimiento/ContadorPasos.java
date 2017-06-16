@@ -4,6 +4,7 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class ContadorPasos extends SensorMovimiento {
@@ -12,9 +13,9 @@ public class ContadorPasos extends SensorMovimiento {
 
     private Sensor contadorPasos;
 
-    private TextView tv;
+    private EditText tv;
 
-    public ContadorPasos(Context context, TextView tv){
+    public ContadorPasos(Context context, EditText tv){
         super(context);
         contadorPasos = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         this.tv = tv;
