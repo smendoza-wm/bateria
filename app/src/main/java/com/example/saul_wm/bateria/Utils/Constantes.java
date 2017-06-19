@@ -11,6 +11,8 @@ public final class Constantes {
     public static final int VERSION_BD = 1;
     public static final String NOMBRE_BD = "Base_Bateria";
 
+    public static final int REQUEST_LOCATION = 100;
+
 
     float SHAKE_THRESHOLD = (float) 6.5E-8;
 }
