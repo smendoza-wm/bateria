@@ -26,7 +26,7 @@ import java.util.Locale;
   #                Hace uso de mas recursos, por lo que se sugiere usarla solo en caso      #
   #                necesario.                                                               #
   #                                                                                         #
-  #  @author: WebMaps S.A.                                                                  #
+  #                                                                                         #
   ###########################################################################################*/
 
 public class BateriaDinamica extends BroadcastReceiver{

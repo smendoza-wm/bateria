@@ -128,6 +128,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Detener Medicion" />
+
+            <TextView
+                android:id="@+id/tv9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:scrollbars = "vertical" />
+
+            <TextView
+                android:id="@+id/tv10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:scrollbars = "vertical" />
+
+
         </LinearLayout>
     </ScrollView>
 

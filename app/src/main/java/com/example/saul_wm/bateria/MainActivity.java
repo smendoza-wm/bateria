@@ -1,6 +1,8 @@
 package com.example.saul_wm.bateria;
 
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,10 +11,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.saul_wm.bateria.Bateria.BateriaDinamica;
+import com.example.saul_wm.bateria.Localizacion.GPS;
 import com.example.saul_wm.bateria.Movimiento.Acelerometro;
 import com.example.saul_wm.bateria.Movimiento.ContadorPasos;
 import com.example.saul_wm.bateria.Movimiento.Orientacion;
+import com.example.saul_wm.bateria.Servicios.AplicacionesActivas;
+import com.example.saul_wm.bateria.Telefono.HistorialLlamadas;
 import com.example.saul_wm.bateria.Telefono.HistorialMjs;
+
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -25,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText tv6;
     private EditText tv7;
     private EditText tv8;
+    private TextView tv9;
+    private TextView tv10;
 
     private Button iniciar;
     private Button finalizar;
@@ -41,15 +53,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         initComponents();
 
-        //HistorialMjs historialMjs = new HistorialMjs(this);
-        //historialMjs.getHistorial();
 
-        //startService(new Intent(this, AplicacionesActivas.class));
 
-        //BateriaDinamica batDinamica = new BateriaDinamica(this);
-        //batDinamica.iniciarRegistro();
+        startService(new Intent(this, AplicacionesActivas.class));
 
-        /*Activity act = this;
+        BateriaDinamica batDinamica = new BateriaDinamica(this);
+        batDinamica.iniciarRegistro();
+
+      /*  Activity act = this;
         HistorialLlamadas historialLlamadas = new HistorialLlamadas(act);
 
         ArrayList<String[]> llamadas =  historialLlamadas.getHistorial();
@@ -63,7 +74,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             aux += "Tipo de llamada " + llamada[3] + "\n";
         }
 
-        Log.d("Llamada", aux);*/
+        tv9.setText(aux);
+
+       /* HistorialMjs historialMjs = new HistorialMjs(this);
+        ArrayList<String[]> mensajes = historialMjs.getHistorial();
+
+        aux = "";
+        for (String[] msj : mensajes) {
+            aux += "-----------------------------------------------\n";
+            aux += "Numero " + msj[HistorialMjs.TELEFONO] + "\n";
+            aux += "Fecha Llamada " + msj[HistorialMjs.] + "\n" ;
+            aux += "Duracion Llamada " + msj[HistorialMjs.TELEFONO] + "\n" ;
+            aux += "Tipo de llamada " + msj[HistorialMjs.TELEFONO] + "\n";
+        }
+
+        tv9.setText(aux);*/
+
+
 
         //Acelerometro acelerometro = new Acelerometro(this, aceleracionX, aceleracionY, aceleracionZ);
         //acelerometro.activar();
@@ -74,8 +101,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //ContadorPasos contadorPasos = new ContadorPasos(this, aceleracionX);
         //contadorPasos.iniciar();
 
-        //GPS gps = new GPS(this, this, aceleracionX, aceleracionY);
-        //gps.inicia();
+        GPS gps = new GPS(this, this, tv9, tv10 );
+        gps.inicia();
 
         orientacion = new Orientacion(this, tv1, tv2, tv3);
         contadorPasos = new ContadorPasos(this, tv4);
@@ -93,6 +120,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv6 = (EditText) findViewById(R.id.tv6);
         tv7 = (EditText) findViewById(R.id.tv7);
         tv8 = (EditText) findViewById(R.id.tv8);
+        tv9 = (TextView) findViewById(R.id.tv9);
+        tv10 = (TextView) findViewById(R.id.tv10);
 
         iniciar = (Button) findViewById(R.id.btn_iniciar);
         finalizar = (Button) findViewById(R.id.btn_finalizar);
