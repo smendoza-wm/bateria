@@ -1,7 +1,8 @@
 package com.example.saul_wm.bateria;
 
-import android.app.Activity;
-import android.content.DialogInterface;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -16,11 +17,9 @@ import com.example.saul_wm.bateria.Localizacion.GPS;
 import com.example.saul_wm.bateria.Movimiento.Acelerometro;
 import com.example.saul_wm.bateria.Movimiento.ContadorPasos;
 import com.example.saul_wm.bateria.Movimiento.Orientacion;
+import com.example.saul_wm.bateria.Pantalla.Pantalla;
 import com.example.saul_wm.bateria.Servicios.AplicacionesActivas;
-import com.example.saul_wm.bateria.Telefono.HistorialLlamadas;
 import com.example.saul_wm.bateria.Telefono.HistorialMjs;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -53,12 +52,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         initComponents();
 
+        //Pantalla pantalla = new Pantalla(this);
+
+        /*startService(new Intent(this, AplicacionesActivas.class));
 
 
-        startService(new Intent(this, AplicacionesActivas.class));
-
-        BateriaDinamica batDinamica = new BateriaDinamica(this);
-        batDinamica.iniciarRegistro();
 
       /*  Activity act = this;
         HistorialLlamadas historialLlamadas = new HistorialLlamadas(act);
@@ -101,8 +99,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //ContadorPasos contadorPasos = new ContadorPasos(this, aceleracionX);
         //contadorPasos.iniciar();
 
-        GPS gps = new GPS(this, this, tv9, tv10 );
-        gps.inicia();
+       /* GPS gps = new GPS(this, this, tv9, tv10 );
+        gps.inicia();*/
 
         orientacion = new Orientacion(this, tv1, tv2, tv3);
         contadorPasos = new ContadorPasos(this, tv4);
@@ -147,4 +145,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
+    public void iniciarBateriaDinamica(){
+        BateriaDinamica batDinamica = new BateriaDinamica(this);
+        batDinamica.iniciarRegistro();
+    }
+
+    public void getHistorialLlamadas(){
+        HistorialMjs historialMjs = new HistorialMjs(this);
+        ArrayList<String[]> mensajes = historialMjs.getHistorial();
+
+        String aux = "";
+        for (String[] msj : mensajes) {
+            aux += "-----------------------------------------------\n";
+            aux += "Numero " + msj[HistorialMjs.TELEFONO] + "\n";
+            aux += "Fecha Llamada " + msj[HistorialMjs.] + "\n" ;
+            aux += "Duracion Llamada " + msj[HistorialMjs.TELEFONO] + "\n" ;
+            aux += "Tipo de llamada " + msj[HistorialMjs.TELEFONO] + "\n";
+        }
+
+        tv9.setText(aux);
+    }
+
 }
