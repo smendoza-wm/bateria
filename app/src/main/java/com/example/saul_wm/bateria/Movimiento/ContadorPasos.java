@@ -18,7 +18,7 @@ public class ContadorPasos extends SensorMovimiento {
     public ContadorPasos(Context context, EditText tv){
         super(context);
         contadorPasos = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-        this.tv = tv;
+        //this.tv = tv;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class ContadorPasos extends SensorMovimiento {
         if(event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR){
             pasos++;
 
-            tv.setText(pasos + "");
+            //tv.setText(pasos + "");
         }
     }
 

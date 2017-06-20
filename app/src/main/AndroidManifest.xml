@@ -23,10 +23,12 @@
             </intent-filter>
         </activity>
 
-
         <service
             android:name=".Servicios.AplicacionesActivas"
-            android:exported="false"></service>
+            android:exported="false" />
+        <service
+            android:name=".Servicios.ServiceContadorPasos"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -1,8 +1,7 @@
 package com.example.saul_wm.bateria;
 
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +18,8 @@ import com.example.saul_wm.bateria.Movimiento.ContadorPasos;
 import com.example.saul_wm.bateria.Movimiento.Orientacion;
 import com.example.saul_wm.bateria.Pantalla.Pantalla;
 import com.example.saul_wm.bateria.Servicios.AplicacionesActivas;
+import com.example.saul_wm.bateria.Servicios.ServiceContadorPasos;
+import com.example.saul_wm.bateria.Telefono.HistorialLlamadas;
 import com.example.saul_wm.bateria.Telefono.HistorialMjs;
 
 import java.util.ArrayList;
@@ -52,59 +53,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         initComponents();
 
-        //Pantalla pantalla = new Pantalla(this);
+        Intent intent = new Intent(getApplicationContext(), ServiceContadorPasos.class );
+        startService(intent);
 
-        /*startService(new Intent(this, AplicacionesActivas.class));
+       /* iniciarAcelerometro();
+        iniciarOrientacion();
+        iniciarContadorDePasos();
 
+        getHistorialLlamadas();
+        getHistorialMensajes(); */
 
+        //iniciarPantalla();
+        //iniciarBateriaDinamica();
 
-      /*  Activity act = this;
-        HistorialLlamadas historialLlamadas = new HistorialLlamadas(act);
-
-        ArrayList<String[]> llamadas =  historialLlamadas.getHistorial();
-
-        String aux = "";
-        for (String[] llamada : llamadas) {
-            aux += "-----------------------------------------------\n";
-            aux += "Numero " + llamada[0] + "\n";
-            aux += "Fecha Llamada " + llamada[1] + "\n" ;
-            aux += "Duracion Llamada " + llamada[2] + "\n" ;
-            aux += "Tipo de llamada " + llamada[3] + "\n";
-        }
-
-        tv9.setText(aux);
-
-       /* HistorialMjs historialMjs = new HistorialMjs(this);
-        ArrayList<String[]> mensajes = historialMjs.getHistorial();
-
-        aux = "";
-        for (String[] msj : mensajes) {
-            aux += "-----------------------------------------------\n";
-            aux += "Numero " + msj[HistorialMjs.TELEFONO] + "\n";
-            aux += "Fecha Llamada " + msj[HistorialMjs.] + "\n" ;
-            aux += "Duracion Llamada " + msj[HistorialMjs.TELEFONO] + "\n" ;
-            aux += "Tipo de llamada " + msj[HistorialMjs.TELEFONO] + "\n";
-        }
-
-        tv9.setText(aux);*/
-
-
-
-        //Acelerometro acelerometro = new Acelerometro(this, aceleracionX, aceleracionY, aceleracionZ);
-        //acelerometro.activar();
-
-       // Orientacion orientacion = new Orientacion(this, aceleracionX, aceleracionY, aceleracionZ);
-        //orientacion.iniciar();
-
-        //ContadorPasos contadorPasos = new ContadorPasos(this, aceleracionX);
-        //contadorPasos.iniciar();
-
-       /* GPS gps = new GPS(this, this, tv9, tv10 );
-        gps.inicia();*/
-
-        orientacion = new Orientacion(this, tv1, tv2, tv3);
-        contadorPasos = new ContadorPasos(this, tv4);
-        acelerometro = new Acelerometro(this, tv5, tv6, tv7, tv8);
+        //iniciarServicioApp();
 
     }
 
@@ -151,7 +113,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         batDinamica.iniciarRegistro();
     }
 
-    public void getHistorialLlamadas(){
+    public void iniciarOrientacion(){
+        orientacion = new Orientacion(this, tv1, tv2, tv3);
+    }
+
+    public void iniciarContadorDePasos(){
+        contadorPasos = new ContadorPasos(this, tv4);
+    }
+
+    public void iniciarAcelerometro(){
+        acelerometro = new Acelerometro(this, tv5, tv6, tv7, tv8);
+    }
+
+    public void getHistorialMensajes(){
         HistorialMjs historialMjs = new HistorialMjs(this);
         ArrayList<String[]> mensajes = historialMjs.getHistorial();
 
@@ -159,12 +133,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (String[] msj : mensajes) {
             aux += "-----------------------------------------------\n";
             aux += "Numero " + msj[HistorialMjs.TELEFONO] + "\n";
-            aux += "Fecha Llamada " + msj[HistorialMjs.] + "\n" ;
-            aux += "Duracion Llamada " + msj[HistorialMjs.TELEFONO] + "\n" ;
-            aux += "Tipo de llamada " + msj[HistorialMjs.TELEFONO] + "\n";
+            aux += "Fecha Llamada " + msj[HistorialMjs.FECHA] + "\n" ;
+            aux += "Tipo de msj " + msj[HistorialMjs.TIPO] + "\n" ;
+            aux += "Contenido " + msj[HistorialMjs.MENSAJE] + "\n";
         }
 
         tv9.setText(aux);
     }
 
+    public void getHistorialLlamadas(){
+        Activity act = this;
+        HistorialLlamadas historialLlamadas = new HistorialLlamadas(act);
+
+        ArrayList<String[]> llamadas =  historialLlamadas.getHistorial();
+
+        String aux = "";
+        for (String[] llamada : llamadas) {
+            aux += "-----------------------------------------------\n";
+            aux += "Numero " + llamada[0] + "\n";
+            aux += "Fecha Llamada " + llamada[1] + "\n" ;
+            aux += "Duracion Llamada " + llamada[2] + "\n" ;
+            aux += "Tipo de llamada " + llamada[3] + "\n";
+        }
+
+        tv10.setText(aux);
+    }
+
+    public void iniciarGPS(){
+        GPS gps = new GPS(this, this, tv9, tv10 );
+        gps.inicia();
+    }
+
+    public void iniciarPantalla(){
+        Pantalla pantalla = new Pantalla(this);
+    }
+
+    public void iniciarServicioApp(){
+        startService(new Intent(this, AplicacionesActivas.class));
+    }
 }
