@@ -19,14 +19,15 @@ import android.widget.Toast;
 
 import com.example.saul_wm.bateria.Localizacion.GPS;
 import com.example.saul_wm.bateria.MainActivity;
+import com.example.saul_wm.bateria.Movimiento.Acelerometro;
+import com.example.saul_wm.bateria.Movimiento.ContadorPasos;
 
 import org.w3c.dom.Text;
 
-public class Localizador extends Service implements SensorEventListener{
-    private SensorManager sensorManager = null;
-    private Sensor sensor = null;
-    private int pasos = 0;
-    private GPS gps;
+public class Localizador extends Service{
+
+    private ContadorPasos contadorPasos;
+    private Acelerometro acelerometro;
 
     public Localizador() {
 
@@ -37,9 +38,8 @@ public class Localizador extends Service implements SensorEventListener{
     @Override
     public int onStartCommand(Intent intent,  int flags, int startId) {
         primerPlano();
-        iniciarContadorPasos();
-        Context context = getApplicationContext();
-        gps = new GPS(context);
+        //iniciarContadorPasos();
+        iniciarAcelerometro();
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -66,28 +66,14 @@ public class Localizador extends Service implements SensorEventListener{
         startForeground(1, builder.build());
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if(event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR){
-            pasos++;
-            System.out.println("Numero de pasos: " + pasos);
-
-            if(pasos % 10 == 0){
-                gps.iniciarSimple();
-                System.out.println("Latitud: " + gps.getLatitud());
-                System.out.println("Longitud: " + gps.getLongitud());
-            }
-        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
 
     private void iniciarContadorPasos(){
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-        sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI);
+        contadorPasos = new ContadorPasos(getApplicationContext());
+        contadorPasos.iniciar();
+    }
+
+    private void iniciarAcelerometro(){
+        acelerometro = new Acelerometro(getApplicationContext());
+        acelerometro.iniciar();
     }
 }

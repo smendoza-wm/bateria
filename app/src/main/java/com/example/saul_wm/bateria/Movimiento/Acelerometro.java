@@ -9,10 +9,14 @@ import android.hardware.SensorManager;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.saul_wm.bateria.Localizacion.GPS;
 import com.example.saul_wm.bateria.Utils.Constantes;
 
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 
 public class Acelerometro implements SensorEventListener{
     private float acelX;
@@ -23,10 +27,15 @@ public class Acelerometro implements SensorEventListener{
     private float ultAcelY;
     private float ultAcelZ;
 
+    private ArrayList<Float> historialAceleracion;
+
     private long tiempoAnterior;
+    private Context context;
 
     private SensorManager sensorManager;
     private Sensor acelerometro;
+
+    private GPS gps;
 
     private EditText x;
     private EditText y;
@@ -40,6 +49,16 @@ public class Acelerometro implements SensorEventListener{
         this.y = y;
         this.z = z;
         this.promedio = promedio;
+
+
+    }
+
+    public Acelerometro(Context context){
+        sensorManager = (SensorManager) context.getSystemService(context.SENSOR_SERVICE);
+        acelerometro = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+        historialAceleracion = new ArrayList<>();
+        this.context = context;
+        gps = new GPS(context);
     }
 
     public void iniciar(){
@@ -75,16 +94,34 @@ public class Acelerometro implements SensorEventListener{
                 Log.d("Velocidad Y", acelY+"");
                 Log.d("Velocidad Z", acelZ+"");
 
-                x.setText(acelX + "");
-                y.setText(acelY + "");
-                z.setText(acelZ + "");
+               // x.setText(acelX + "");
+               // y.setText(acelY + "");
+               // z.setText(acelZ + "");
 
                 ultAcelX = acelX;
                 ultAcelY = acelY;
                 ultAcelZ = acelZ;
 
                 float promedio = ( Math.abs(acelX) + Math.abs(acelY) + Math.abs(acelZ) ) / 3;
-                this.promedio.setText(promedio + "");
+                historialAceleracion.add(promedio);
+                if(historialAceleracion.size() == 10) {
+                    float prom = 0;
+                    for (int i = 0; i < historialAceleracion.size(); i++){
+                        prom += historialAceleracion.get(i);
+                    }
+                    prom /= 10;
+                    System.out.println("EL PROMEDIO DE 10 MEDICIONES FUE: " + prom);
+                    Toast.makeText(context,"EL PROMEDIO DE 10 MEDICIONES FUE: " + prom, Toast.LENGTH_SHORT).show();
+                    historialAceleracion.clear();
+
+                    if(prom > 0.5){
+                        gps.iniciarSimple();
+                        System.out.println("Latitud: " + gps.getLatitud());
+                        System.out.println("Longitud: " + gps.getLongitud());
+                    }
+
+                }
+               // this.promedio.setText(promedio + "");
             }
         }
     }

@@ -62,9 +62,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Intent intent = new Intent(getApplicationContext(), ServiceContadorPasos.class );
         //startService(intent);
 
-        iniciarAcelerometro();
-        iniciarOrientacion();
-        iniciarContadorDePasos();
+        //iniciarAcelerometro();
+        //iniciarOrientacion();
+        //iniciarContadorDePasos();
 
         //getHistorialLlamadas();
         //getHistorialMensajes();
@@ -82,9 +82,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //GPS gps = new GPS(this, this, tv9, tv10 );
         //gps.inicia();
 
-        orientacion = new Orientacion(this, tv1, tv2, tv3);
-        contadorPasos = new ContadorPasos(this, tv4);
-        acelerometro = new Acelerometro(this, tv5, tv6, tv7, tv8);
+       // orientacion = new Orientacion(this, tv1, tv2, tv3);
+        //contadorPasos = new ContadorPasos(this, tv4);
+        //acelerometro = new Acelerometro(this, tv5, tv6, tv7, tv8);
 
 
 
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void iniciarContadorDePasos(){
-        contadorPasos = new ContadorPasos(this, tv4);
+        contadorPasos = new ContadorPasos(this);
         contadorPasos.iniciar();
     }
 

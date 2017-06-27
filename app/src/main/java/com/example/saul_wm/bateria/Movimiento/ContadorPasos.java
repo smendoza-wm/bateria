@@ -7,17 +7,22 @@ import android.hardware.SensorManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.saul_wm.bateria.Localizacion.GPS;
+
 public class ContadorPasos extends SensorMovimiento {
 
     private int pasos = 0;
+    private GPS gps;
 
     private Sensor contadorPasos;
 
     private EditText tv;
 
-    public ContadorPasos(Context context, EditText tv){
+    public ContadorPasos(Context context){
         super(context);
         contadorPasos = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+        gps = new GPS(context);
+
         this.tv = tv;
     }
 
@@ -36,8 +41,12 @@ public class ContadorPasos extends SensorMovimiento {
     public void onSensorChanged(SensorEvent event) {
         if(event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR){
             pasos++;
-
-            tv.setText(pasos + "");
+            if(pasos % 10 == 0){
+                gps.iniciarSimple();
+                System.out.println("Latitud: " + gps.getLatitud());
+                System.out.println("Longitud: " + gps.getLongitud());
+            }
+            //tv.setText(pasos + "");
         }
     }
 
