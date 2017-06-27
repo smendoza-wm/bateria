@@ -68,6 +68,7 @@ public class Localizacion implements GoogleApiClient.ConnectionCallbacks, Google
         locationRequest = new LocationRequest()
                 .setInterval(Constantes.INTERVALO_LOCALIZACION)
                 .setFastestInterval(Constantes.INTERVALO_LOCALIZACION_RAPIDA)
+                .setSmallestDisplacement(Constantes.MINIMA_DISTANCIA_ENTRE_ACTUALIZACIONES)
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
