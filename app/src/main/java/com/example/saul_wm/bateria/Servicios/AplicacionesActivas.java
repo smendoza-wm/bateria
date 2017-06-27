@@ -30,7 +30,7 @@ public class AplicacionesActivas extends IntentService {
                 ActivityManager am = ((ActivityManager) getSystemService(ACTIVITY_SERVICE));
                 List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(5);
                 top = taskInfo.get(0).topActivity.getPackageName();
-                Log.i("TOP", "top app = " + top);
+                Log.i("Version anterior", "top app = " + top);
             }else{ //For versions Lollipop and above
                 List<AndroidAppProcess> processes = ProcessManager.getRunningForegroundApps(getApplicationContext());
                 Collections.sort(processes, new ProcessManager.ProcessComparator());
@@ -47,8 +47,12 @@ public class AplicacionesActivas extends IntentService {
                         }
 
                     }
+<<<<<<< HEAD
                     Toast.makeText(this,"top app = " + top, Toast.LENGTH_SHORT).show();
                     Log.i("TOP", "top app = " + top);
+=======
+                    Log.i("activa", "top app = " + top);
+>>>>>>> serviciosLocalizacionGoogle
                 }
             }
         }
