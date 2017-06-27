@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.Context;
 import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.jaredrummler.android.processes.ProcessManager;
 import com.jaredrummler.android.processes.models.AndroidAppProcess;
@@ -46,6 +47,7 @@ public class AplicacionesActivas extends IntentService {
                         }
 
                     }
+                    Toast.makeText(this,"top app = " + top, Toast.LENGTH_SHORT).show();
                     Log.i("TOP", "top app = " + top);
                 }
             }

@@ -22,4 +22,8 @@ public class Pantalla extends BroadcastReceiver {
         context.registerReceiver(this, new IntentFilter(Intent.ACTION_SCREEN_ON));
         context.registerReceiver(this, new IntentFilter(Intent.ACTION_SCREEN_OFF));
     }
+
+    public boolean estaPrendida(){
+        return this.prendido;
+    }
 }

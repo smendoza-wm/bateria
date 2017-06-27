@@ -53,20 +53,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         initComponents();
 
-        Intent intent = new Intent(getApplicationContext(), ServiceContadorPasos.class );
-        startService(intent);
+        //Intent intent = new Intent(getApplicationContext(), ServiceContadorPasos.class );
+        //startService(intent);
 
-       /* iniciarAcelerometro();
+        iniciarAcelerometro();
         iniciarOrientacion();
         iniciarContadorDePasos();
 
-        getHistorialLlamadas();
-        getHistorialMensajes(); */
+        //getHistorialLlamadas();
+        //getHistorialMensajes();
 
-        //iniciarPantalla();
-        //iniciarBateriaDinamica();
+        iniciarPantalla();
+        iniciarBateriaDinamica();
 
-        //iniciarServicioApp();
+        iniciarServicioApp();
 
     }
 
@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void iniciarContadorDePasos(){
         contadorPasos = new ContadorPasos(this, tv4);
+        contadorPasos.iniciar();
     }
 
     public void iniciarAcelerometro(){
