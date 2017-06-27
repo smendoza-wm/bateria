@@ -1,6 +1,5 @@
 package com.example.saul_wm.bateria.Localizacion;
 
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -30,10 +29,6 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import org.w3c.dom.Text;
-
-/**
- * Created by Saul-WM on 19/06/2017.
- */
 
 public class Localizacion implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 

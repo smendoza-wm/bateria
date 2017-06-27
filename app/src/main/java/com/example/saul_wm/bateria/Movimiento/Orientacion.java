@@ -65,11 +65,11 @@ public class Orientacion implements SensorEventListener{
                     float orientation[] = new float[3];
                     SensorManager.getOrientation(R, orientation);
 
-                    System.out.println("-----------------------------------------------");
+                   /* System.out.println("-----------------------------------------------");
                     System.out.println("Azimuth:" + orientation[0]);
                     System.out.println("Pitch: " + orientation[1]);
                     System.out.println("Roll: " + orientation[2]);
-                    System.out.println("***********************************************");
+                    System.out.println("***********************************************");*/
 
                     tv1.setText(orientation[0]+"");
                     tv2.setText(orientation[1]+"");

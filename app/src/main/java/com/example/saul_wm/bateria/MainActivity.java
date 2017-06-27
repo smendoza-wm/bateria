@@ -4,8 +4,6 @@ package com.example.saul_wm.bateria;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,12 +20,10 @@ import com.example.saul_wm.bateria.Movimiento.ContadorPasos;
 import com.example.saul_wm.bateria.Movimiento.Orientacion;
 import com.example.saul_wm.bateria.Pantalla.Pantalla;
 import com.example.saul_wm.bateria.Servicios.AplicacionesActivas;
-import com.example.saul_wm.bateria.Servicios.ServiceContadorPasos;
+import com.example.saul_wm.bateria.Servicios.Localizador;
 import com.example.saul_wm.bateria.Telefono.HistorialLlamadas;
 import com.example.saul_wm.bateria.Telefono.HistorialMjs;
 import com.example.saul_wm.bateria.Utils.Constantes;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 
@@ -73,12 +69,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //getHistorialLlamadas();
         //getHistorialMensajes();
 
-        localizacion = new Localizacion(this, this, tv9, tv10);
+        //localizacion = new Localizacion(this, this, tv9, tv10);
+        Intent localizador = new Intent(this, Localizador.class);
+        startService(localizador);
 
-        iniciarPantalla();
-        iniciarBateriaDinamica();
 
-        iniciarServicioApp();
+        //iniciarPantalla();
+        //iniciarBateriaDinamica();
+
+        //iniciarServicioApp();
 
         //GPS gps = new GPS(this, this, tv9, tv10 );
         //gps.inicia();
@@ -95,14 +94,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
-        localizacion.iniciar();
+        //localizacion.iniciar();
 
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        localizacion.finalzar();
+
+        //localizacion.finalzar();
 
     }
 
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void iniciarGPS(){
         GPS gps = new GPS(this, this, tv9, tv10 );
-        gps.inicia();
+        //gps.inicia();
     }
 
     public void iniciarPantalla(){

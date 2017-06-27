@@ -8,11 +8,14 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
 
-public class ServiceContadorPasos extends Service implements SensorEventListener {
+import com.example.saul_wm.bateria.Localizacion.GPS;
+
+public class ServiceContadorPasos extends Service implements SensorEventListener{
     private static final String DEBUG_TAG = "ServiceContadorPasos";
 
     private SensorManager sensorManager = null;
     private Sensor sensor = null;
+
 
     private int pasos = 0;
 
@@ -38,7 +41,8 @@ public class ServiceContadorPasos extends Service implements SensorEventListener
         if(event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR){
             pasos++;
             System.out.println("Numero de pasos: " + pasos);
-            //tv.setText(pasos + "");
+
+
 
         }
     }
