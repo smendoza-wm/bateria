@@ -38,8 +38,8 @@ public class Localizador extends Service{
     @Override
     public int onStartCommand(Intent intent,  int flags, int startId) {
         primerPlano();
-        //iniciarContadorPasos();
-        iniciarAcelerometro();
+        iniciarContadorPasos();
+        //iniciarAcelerometro();
 
         return super.onStartCommand(intent, flags, startId);
     }

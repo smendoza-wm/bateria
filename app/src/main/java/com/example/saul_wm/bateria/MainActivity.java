@@ -1,6 +1,5 @@
 package com.example.saul_wm.bateria;
 
-
 import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -85,9 +84,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //getHistorialLlamadas();
         //getHistorialMensajes();
 
-        localizacion = new Localizacion(this, this, tv9, tv10);
+        //localizacion = new Localizacion(this, this, tv9, tv10);
         Intent localizador = new Intent(this, Localizador.class);
-        //startService(localizador);
+        startService(localizador);
 
 
         //iniciarPantalla();
