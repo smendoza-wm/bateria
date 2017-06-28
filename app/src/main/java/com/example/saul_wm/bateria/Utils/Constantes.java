@@ -1,6 +1,9 @@
 package com.example.saul_wm.bateria.Utils;
 
 
+import com.example.saul_wm.bateria.Http.APIService;
+import com.example.saul_wm.bateria.Http.RetrofitCliente;
+
 public final class Constantes {
     public static final int BATERIA_MINIMA = 20; //Valores posibles: 0-100
     public static final long INTERVALO_MUESTRA_ACELERACION = 1000; //2 segundos
@@ -18,6 +21,10 @@ public final class Constantes {
 
     public static final int REQUEST_CHECK_SETTINGS = 0x1;
 
+    public static final String BASE_URL = "";
 
+    public static APIService getAPIService() {
+        return RetrofitCliente.getClient(BASE_URL).create(APIService.class);
+    }
     float SHAKE_THRESHOLD = (float) 6.5E-8;
 }

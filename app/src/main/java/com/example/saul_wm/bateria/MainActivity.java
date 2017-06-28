@@ -13,8 +13,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.saul_wm.bateria.Bateria.BateriaDinamica;
+import com.example.saul_wm.bateria.Http.APIService;
 import com.example.saul_wm.bateria.Localizacion.GPS;
 import com.example.saul_wm.bateria.Localizacion.Localizacion;
+import com.example.saul_wm.bateria.Modelo.LocalizacionJSON;
+import com.example.saul_wm.bateria.Modelo.UbicacionJSON;
 import com.example.saul_wm.bateria.Movimiento.Acelerometro;
 import com.example.saul_wm.bateria.Movimiento.ContadorPasos;
 import com.example.saul_wm.bateria.Movimiento.Orientacion;
@@ -26,6 +29,10 @@ import com.example.saul_wm.bateria.Telefono.HistorialMjs;
 import com.example.saul_wm.bateria.Utils.Constantes;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -52,13 +59,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Localizacion localizacion;
 
+    private APIService mAPIService;
+    private LocalizacionJSON locJSON;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initComponents();
 
+        /*locJSON = new LocalizacionJSON();
+        locJSON.setFecha("2017-06-28");
+        locJSON.setHora("12:00");
+        locJSON.setLatitud("98.123456");
+        locJSON.setLongitud("55.123456");*/
 
+        //mAPIService = Constantes.getAPIService();
         //Intent intent = new Intent(getApplicationContext(), ServiceContadorPasos.class );
         //startService(intent);
 
@@ -69,9 +85,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //getHistorialLlamadas();
         //getHistorialMensajes();
 
-        //localizacion = new Localizacion(this, this, tv9, tv10);
+        localizacion = new Localizacion(this, this, tv9, tv10);
         Intent localizador = new Intent(this, Localizador.class);
-        startService(localizador);
+        //startService(localizador);
 
 
         //iniciarPantalla();
@@ -131,9 +147,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.btn_iniciar:
-                orientacion.iniciar();
+                /*orientacion.iniciar();
                 contadorPasos.iniciar();
-                acelerometro.iniciar();
+                acelerometro.iniciar();*/
+                //sendPost("Saul", locJSON);
                 break;
 
             case R.id.btn_finalizar:
@@ -227,4 +244,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
+    public void sendPost(String idDispositivo, LocalizacionJSON locJSON) {
+        mAPIService.savePost(idDispositivo, locJSON).enqueue(new Callback<UbicacionJSON>() {
+            @Override
+            public void onResponse(Call<UbicacionJSON> call, Response<UbicacionJSON> response) {
+                if(response.isSuccessful()) {
+                    System.out.println("post submitted to API." + response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UbicacionJSON> call, Throwable t) {
+                Log.e("APP", "Unable to submit post to API.");
+            }
+        });
+    }
+
 }
