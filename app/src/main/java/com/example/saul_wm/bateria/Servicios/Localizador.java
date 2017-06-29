@@ -2,35 +2,22 @@ package com.example.saul_wm.bateria.Servicios;
 
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
-import android.support.annotation.IntDef;
 import android.support.v4.app.NotificationCompat;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.saul_wm.bateria.Alarma.Alarm;
-import com.example.saul_wm.bateria.Localizacion.GPS;
+import com.example.saul_wm.bateria.Alarma.Alarma;
 import com.example.saul_wm.bateria.MainActivity;
 import com.example.saul_wm.bateria.Movimiento.Acelerometro;
 import com.example.saul_wm.bateria.Movimiento.ContadorPasos;
-
-import org.w3c.dom.Text;
 
 public class Localizador extends Service{
 
     private ContadorPasos contadorPasos;
     private Acelerometro acelerometro;
 
-    Alarm alarm = new Alarm();
+    Alarma alarma;
 
     public Localizador() {
 
@@ -42,7 +29,9 @@ public class Localizador extends Service{
     public int onStartCommand(Intent intent,  int flags, int startId) {
         primerPlano();
         iniciarAcelerometro();
-        alarm.setAlarm(this);
+        Alarma alarma = new Alarma();
+
+        alarma.setAlarm(this);
         //iniciarContadorPasos();
         return super.onStartCommand(intent, flags, startId);
     }

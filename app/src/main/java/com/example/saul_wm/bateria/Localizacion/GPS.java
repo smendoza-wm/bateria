@@ -2,35 +2,19 @@ package com.example.saul_wm.bateria.Localizacion;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.saul_wm.bateria.Movimiento.ContadorPasos;
+import com.example.saul_wm.bateria.Http.HttpPost;
 import com.example.saul_wm.bateria.Utils.Constantes;
 
-import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class GPS implements LocationListener {
 
@@ -41,11 +25,7 @@ public class GPS implements LocationListener {
     private TextView tv_latitud;
     private TextView tv_longitud;
 
-
-
     private double latitud = 0;
-
-
     private double longitud = 0;
 
     public GPS(Context context, Activity act, TextView tv, TextView tv2) {
@@ -103,7 +83,8 @@ public class GPS implements LocationListener {
         if(longitud != 0.0)
             locationManager.removeUpdates(this);
 
-        new HttpPost().execute("http://dev.avl.webmaps.com.mx/tmp/pruebasAppLocalizacion/ubicacion.php");
+        String [] datos = {"http://dev.avl.webmaps.com.mx/tmp/pruebasAppLocalizacion/ubicacion.php", latitud+"", longitud+""};
+        new HttpPost().execute(datos);
 
         //tv_latitud.setText(location.getLatitude()+"");
         //tv_longitud.setText(location.getLongitude() + "");
@@ -134,66 +115,7 @@ public class GPS implements LocationListener {
         return longitud;
     }
 
-    private void enviaDatos(URL url) {
-        // Obtener la conexión
-        HttpURLConnection con = null;
-        Date date = new Date();
-        DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
-        String hora = hourFormat.format(date);
 
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String fecha = dateFormat.format(date);
 
-        try {
-            // Construir los datos a enviar
-            String data = "posicion=" + ",latitud;" + URLEncoder.encode(latitud+"","UTF-8")
-                        + ",longitud;" + URLEncoder.encode(longitud+"", "UTF-8")
-                        + ",fecha;" + URLEncoder.encode(fecha+"", "UTF-8")
-                        + ",hora;" + URLEncoder.encode(hora+"", "UTF-8");
 
-            con = (HttpURLConnection)url.openConnection();
-
-            // Activar método POST
-            con.setDoOutput(true);
-
-            // Tamaño previamente conocido
-            con.setFixedLengthStreamingMode(data.getBytes().length);
-
-            // Establecer application/x-www-form-urlencoded debido a la simplicidad de los datos
-            con.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
-
-            OutputStream out = new BufferedOutputStream(con.getOutputStream());
-
-            out.write(data.getBytes());
-            out.flush();
-            out.close();
-            System.out.println("Termine de enviar la peticion post");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if(con!=null)
-                con.disconnect();
-        }
-    }
-
-    class HttpPost extends AsyncTask<String, Void, Void> {
-
-        private Exception exception;
-
-        protected Void doInBackground(String... urls) {
-            try {
-                URL url = new URL(urls[0]);
-                enviaDatos(url);
-
-            } catch (Exception e) {
-                this.exception = e;
-            }
-            return null;
-        }
-
-        protected void onPostExecute() {
-            // TODO: check this.exception
-            // TODO: do something with the feed
-        }
-    }
 }
