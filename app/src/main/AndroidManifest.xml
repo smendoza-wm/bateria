@@ -14,6 +14,10 @@
     <!--Permisos para conectarse a internet-->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!--Permisos para mantener el dispositivo despierto-->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,6 +25,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <receiver android:process=":remote" android:name=".Alarma.Alarm" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,6 +46,8 @@
             android:name=".Servicios.Localizador"
             android:enabled="true"
             android:exported="true"></service>
+
+       <!-- <receiver android:process=":remote" android:name="Alarma.Alarm" /> -->
     </application>
 
 </manifest>

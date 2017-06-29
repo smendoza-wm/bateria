@@ -17,6 +17,7 @@ import android.support.v4.app.NotificationCompat;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.saul_wm.bateria.Alarma.Alarm;
 import com.example.saul_wm.bateria.Localizacion.GPS;
 import com.example.saul_wm.bateria.MainActivity;
 import com.example.saul_wm.bateria.Movimiento.Acelerometro;
@@ -29,6 +30,8 @@ public class Localizador extends Service{
     private ContadorPasos contadorPasos;
     private Acelerometro acelerometro;
 
+    Alarm alarm = new Alarm();
+
     public Localizador() {
 
     }
@@ -38,9 +41,9 @@ public class Localizador extends Service{
     @Override
     public int onStartCommand(Intent intent,  int flags, int startId) {
         primerPlano();
-        iniciarContadorPasos();
-        //iniciarAcelerometro();
-
+        iniciarAcelerometro();
+        alarm.setAlarm(this);
+        //iniciarContadorPasos();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -65,6 +68,7 @@ public class Localizador extends Service{
         //Ponemos en primer plano el servicio
         startForeground(1, builder.build());
     }
+
 
 
     private void iniciarContadorPasos(){
