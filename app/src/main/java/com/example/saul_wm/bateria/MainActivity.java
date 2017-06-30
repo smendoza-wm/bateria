@@ -1,7 +1,9 @@
 package com.example.saul_wm.bateria;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.saul_wm.bateria.BaseDatos.BaseDatos;
 import com.example.saul_wm.bateria.Bateria.BateriaDinamica;
 import com.example.saul_wm.bateria.Http.APIService;
 import com.example.saul_wm.bateria.Localizacion.GPS;
@@ -67,6 +70,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         initComponents();
 
+        BaseDatos bdBateria = new BaseDatos(this, Constantes.NOMBRE_BD, null, Constantes.VERSION_BD);
+        db = bdBateria.getWritableDatabase();
+        Cursor cursor = db.query("dat_dispositivo", null, null, null, null, null, null);
+        cursor.moveToNext();
+        if(cursor.getCount() < 1){
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("t_dispositivo_id", "Andrea");
+            db.insert("dat_dispositivo", null, contentValues);
+        }
+        else
+            tv1.setText(cursor.getString(0));
+        cursor.close();
+        db.close();
         /*locJSON = new LocalizacionJSON();
         locJSON.setFecha("2017-06-28");
         locJSON.setHora("12:00");
@@ -153,9 +169,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.btn_finalizar:
-                orientacion.detener();
+               /* orientacion.detener();
                 contadorPasos.detener();
-                acelerometro.detener();
+                acelerometro.detener();*/
+                Intent peticionGet = new Intent(this, Main2Activity.class);
+                startActivity(peticionGet);
                 break;
         }
     }

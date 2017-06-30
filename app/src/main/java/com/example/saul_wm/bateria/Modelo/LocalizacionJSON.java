@@ -5,17 +5,13 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class LocalizacionJSON {
-    @SerializedName("latitud")
-    @Expose
+
     private String latitud;
-    @SerializedName("longitud")
-    @Expose
+
     private String longitud;
-    @SerializedName("fecha")
-    @Expose
+
     private String fecha;
-    @SerializedName("hora")
-    @Expose
+
     private String hora;
 
     public String getLatitud() {

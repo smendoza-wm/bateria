@@ -2,20 +2,27 @@ package com.example.saul_wm.bateria.Servicios;
 
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.example.saul_wm.bateria.Alarma.Alarma;
+import com.example.saul_wm.bateria.BaseDatos.BaseDatos;
 import com.example.saul_wm.bateria.MainActivity;
 import com.example.saul_wm.bateria.Movimiento.Acelerometro;
 import com.example.saul_wm.bateria.Movimiento.ContadorPasos;
+import com.example.saul_wm.bateria.Utils.Constantes;
 
 public class Localizador extends Service{
 
     private ContadorPasos contadorPasos;
     private Acelerometro acelerometro;
+
+    private String idDispositivo;
 
     Alarma alarma;
 
@@ -28,10 +35,12 @@ public class Localizador extends Service{
     @Override
     public int onStartCommand(Intent intent,  int flags, int startId) {
         primerPlano();
+        idDispositivo = getIdDispositivo();
         iniciarAcelerometro();
-        Alarma alarma = new Alarma();
 
-        alarma.setAlarm(this);
+        //Alarma alarma = new Alarma();
+
+        //alarma.setAlarm(this);
         //iniciarContadorPasos();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -67,6 +76,18 @@ public class Localizador extends Service{
 
     private void iniciarAcelerometro(){
         acelerometro = new Acelerometro(getApplicationContext());
+        acelerometro.setIdDispositivo(idDispositivo);
         acelerometro.iniciar();
+    }
+
+    private String getIdDispositivo(){
+        BaseDatos bdBateria = new BaseDatos(this, Constantes.NOMBRE_BD, null, Constantes.VERSION_BD);
+        SQLiteDatabase db = bdBateria.getWritableDatabase();
+        Cursor cursor = db.query("dat_dispositivo", null, null, null, null, null, null);
+        cursor.moveToNext();
+        String id = cursor.getString(0);
+        cursor.close();
+        db.close();
+        return id;
     }
 }

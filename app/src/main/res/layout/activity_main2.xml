@@ -11,6 +11,13 @@
         android:id="@+id/tv_result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.95"
+        android:layout_weight="0.70"
         android:text="TextView" />
+
+    <Button
+        android:id="@+id/btn_get"
+        android:layout_width="161dp"
+        android:layout_height="wrap_content"
+        android:text="Obtener datos"
+        android:layout_weight="0.01" />
 </LinearLayout>

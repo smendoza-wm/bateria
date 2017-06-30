@@ -42,6 +42,8 @@ public class Acelerometro implements SensorEventListener{
     private EditText z;
     private EditText promedio;
 
+    private String idDispositivo;
+
     public Acelerometro(Context context, EditText x, EditText y, EditText z, EditText promedio){
         sensorManager = (SensorManager) context.getSystemService(context.SENSOR_SERVICE);
         acelerometro = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
@@ -111,10 +113,11 @@ public class Acelerometro implements SensorEventListener{
                     }
                     prom /= 10;
                     System.out.println("EL PROMEDIO DE 10 MEDICIONES FUE: " + prom);
-                    Toast.makeText(context,"EL PROMEDIO DE 10 MEDICIONES FUE: " + prom, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context,"EL PROMEDIO DE 10 MEDICIONES FUE: " + prom, Toast.LENGTH_SHORT).show();
                     historialAceleracion.clear();
 
                     if(prom > 0.5){
+                        gps.setIdDispositivo(idDispositivo);
                         gps.iniciarSimple();
                         System.out.println("Latitud: " + gps.getLatitud());
                         System.out.println("Longitud: " + gps.getLongitud());
@@ -140,5 +143,7 @@ public class Acelerometro implements SensorEventListener{
     public float getAceleracionZ() {
         return acelZ;
     }
+
+    public void setIdDispositivo(String id){this.idDispositivo = id;}
 
 }

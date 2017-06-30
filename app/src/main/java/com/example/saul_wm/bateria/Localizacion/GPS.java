@@ -28,6 +28,12 @@ public class GPS implements LocationListener {
     private double latitud = 0;
     private double longitud = 0;
 
+    private String idDispositivo;
+
+    public void setIdDispositivo(String idDispositivo) {
+        this.idDispositivo = idDispositivo;
+    }
+
     public GPS(Context context, Activity act, TextView tv, TextView tv2) {
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         this.activity = act;
@@ -77,13 +83,13 @@ public class GPS implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        System.out.println("-----Cambie de cooordenadas");
+        System.out.println("-----Cambie de cooordenadas con id " + idDispositivo);
         this.longitud = location.getLongitude();
         this.latitud = location.getLatitude();
         if(longitud != 0.0)
             locationManager.removeUpdates(this);
 
-        String [] datos = {"http://dev.avl.webmaps.com.mx/tmp/pruebasAppLocalizacion/ubicacion.php", latitud+"", longitud+""};
+        String [] datos = {"http://dev.avl.webmaps.com.mx/tmp/pruebasAppLocalizacion/ubicacion.php", latitud+"", longitud+"", idDispositivo};
         new HttpPost().execute(datos);
 
         //tv_latitud.setText(location.getLatitude()+"");

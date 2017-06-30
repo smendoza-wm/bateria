@@ -8,29 +8,24 @@ import android.os.BatteryManager;
 import com.example.saul_wm.bateria.Utils.Constantes;
 
 /*###########################################################################################
+  #                                                                                         #
+  #  @author:      Saul Mendoza <saul.mendoza@webmaps.com.mx>                               #
+  #  @created:     30/06/2017                                                               #
   #  @description: Clase que monitorea el nivel de la bateria, lo hace de manera estatica,  #
   #                es decir, solo obtiene la informacion de la bateria cuando se crea un    #
   #                un objeto, y no vuelve a actualizar su informacion, a menos que se llame #
   #                al metodo actualizarInformacion();                                       #
-  #  @author: WebMaps S.A.                                                                  #
+  #  @copyright:   Copyright (c) 2017, WebMaps                                              #
+  #                                                                                         #
   ###########################################################################################*/
 
-public class BateriaEstatica {
-
-    //Constantes para ver el tipo de carga
-    public static final String CARGA_USB = "USB";
-    public static final String CARGA_AC = "AC";
-
-    private int nivelActual = 0;
-
-    private boolean bateriaBaja = false;
-    private boolean cargando = false;
-    private String fuenteCarga = "NO_CARGA";
+public class BateriaEstatica extends Bateria{
 
     private Intent statusBateria;
     private IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
 
     public BateriaEstatica(Context context){
+        super(context);
         actualizaInformacion(context);
     }
 
@@ -44,11 +39,11 @@ public class BateriaEstatica {
     }
 
     private void actualizaNivelActual(){
-        this.nivelActual = statusBateria.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+        nivel = statusBateria.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
     }
 
     private void actualizaBateriaBaja(){
-        if(nivelActual < Constantes.BATERIA_MINIMA)
+        if(nivel < Constantes.BATERIA_MINIMA)
             bateriaBaja = true;
         else
             bateriaBaja = false;
@@ -70,22 +65,6 @@ public class BateriaEstatica {
             fuenteCarga = "AC";
         else
             fuenteCarga = "NO_CARGA";
-    }
-
-    public int getNivelActual(){
-        return this.nivelActual;
-    }
-
-    public boolean esBateriaBaja(){
-        return this.bateriaBaja;
-    }
-
-    public boolean estaCargando() {
-        return this.cargando;
-    }
-
-    public String getFuenteCarga(){
-        return this.fuenteCarga;
     }
 
 }

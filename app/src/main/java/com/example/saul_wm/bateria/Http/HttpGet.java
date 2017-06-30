@@ -1,5 +1,6 @@
 package com.example.saul_wm.bateria.Http;
 
+import android.database.sqlite.SQLiteBindOrColumnIndexOutOfRangeException;
 import android.os.AsyncTask;
 
 import java.io.BufferedReader;
@@ -11,11 +12,19 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Created by Saul-WM on 29/06/2017.
- */
 
-public class HttpGet extends AsyncTask<String, Void, Void>{
+public class HttpGet extends AsyncTask<String, Void, String>{
+
+    public interface AsyncResponse {
+        void processFinish(String output);
+    }
+
+    public AsyncResponse delegate = null;
+
+    public HttpGet(AsyncResponse delegate){
+        this.delegate = delegate;
+    }
+
 
 
 
@@ -43,13 +52,16 @@ public class HttpGet extends AsyncTask<String, Void, Void>{
                         sb.append(line+"\n");
                     }
                     br.close();
+                    System.out.println(sb);
                     return sb.toString();
+                default:
+                    System.out.println("Estatus " + status);
             }
 
         } catch (MalformedURLException ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Estatus " + ex.toString());
         } catch (IOException ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Estatus " + ex.toString());
         } finally {
             if (c != null) {
                 try {
@@ -63,8 +75,14 @@ public class HttpGet extends AsyncTask<String, Void, Void>{
     }
 
     @Override
-    protected Void doInBackground(String... params) {
+    protected String doInBackground(String... params) {
+        return getJSON("http://dev.avl.webmaps.com.mx/tmp/pruebasAppLocalizacion/ubicacion.php?ubicacion=3", 30000);
 
-        return null;
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+        //super.onPostExecute(aVoid);
+        delegate.processFinish(result);
     }
 }

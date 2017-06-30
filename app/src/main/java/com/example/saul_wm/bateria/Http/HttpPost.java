@@ -21,7 +21,8 @@ public class HttpPost extends AsyncTask<String, Void, Void> {
             URL url = new URL(datos[0]);
             String latitud = datos[1];
             String longitud = datos[2];
-            enviaDatos(url, latitud, longitud);
+            String idDispositivo = datos[3];
+            enviaDatos(url, latitud, longitud, idDispositivo);
 
         } catch (Exception e) {
             this.exception = e;
@@ -34,7 +35,7 @@ public class HttpPost extends AsyncTask<String, Void, Void> {
         // TODO: do something with the feed
     }
 
-    private void enviaDatos(URL url, String latitud, String longitud) {
+    private void enviaDatos(URL url, String latitud, String longitud,String idDispositivo) {
         // Obtener la conexión
         HttpURLConnection con = null;
         Date date = new Date();
@@ -46,7 +47,8 @@ public class HttpPost extends AsyncTask<String, Void, Void> {
 
         try {
             // Construir los datos a enviar
-            String data = "posicion=" + ",latitud;" + URLEncoder.encode(latitud+"","UTF-8")
+            String data = "posicion=" + ",idDispositivo;"+URLEncoder.encode(idDispositivo, "UTF-8")
+                    +",latitud;" + URLEncoder.encode(latitud+"","UTF-8")
                     + ",longitud;" + URLEncoder.encode(longitud+"", "UTF-8")
                     + ",fecha;" + URLEncoder.encode(fecha+"", "UTF-8")
                     + ",hora;" + URLEncoder.encode(hora+"", "UTF-8");
