@@ -11,7 +11,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:text="Nombre"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/tv_localizacion"
@@ -21,7 +22,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:text="Nombre"
-        android:textAppearance="?attr/textAppearanceListItem" />
+
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/btn_actualizar"

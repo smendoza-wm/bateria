@@ -19,7 +19,9 @@ import com.google.gson.Gson;
 
 import org.w3c.dom.Text;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Main2Activity extends AppCompatActivity implements View.OnClickListener {
@@ -28,6 +30,8 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
     Button btn;
     int posicion;
     Dispositivos dispositivo;
+    String usuarios="";
+    ArrayList<Dispositivos> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,17 +42,31 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         btn = (Button) findViewById(R.id.btn_get);
         btn.setOnClickListener(this);*/
 
-        ListView lv = (ListView) findViewById(R.id.lv_dispositivos); //Se relaciona el ListView donde van a estar los botones
-        ArrayList<Dispositivos> list = new ArrayList<>();
-        Dispositivos dis = new Dispositivos("dispositivo", "localizacion");
-        Dispositivos dis2 = new Dispositivos("dis", "loc");
+        HttpGet peticionGet = new HttpGet(new HttpGet.AsyncResponse() {
+            @Override
+            public void processFinish(String output) {
+                usuarios = output;
+                //tv.setText(output);
+                System.out.println("Resultado = " + output);
+                String users [] = usuarios.split(";");
 
-        list.add(dis);
-        list.add(dis2);
+                ListView lv = (ListView) findViewById(R.id.lv_dispositivos); //Se relaciona el ListView donde van a estar los botones
+                list = new ArrayList<>();
+                Dispositivos dis = new Dispositivos(users[0], "localizacion");
+                Dispositivos dis2 = new Dispositivos(users[1], "loc");
 
-        DispositivosAdapter adapter = new DispositivosAdapter(this, list); //Se inicializa el adaptador
-        if (lv != null)
-            lv.setAdapter(adapter);//Se rellena el listView con los botones de los niños
+                list.add(dis);
+                list.add(dis2);
+
+                DispositivosAdapter adapter = new DispositivosAdapter(getApplicationContext(), list); //Se inicializa el adaptador
+                if (lv != null)
+                    lv.setAdapter(adapter);//Se rellena el listView con los botones de los niños
+            }
+        });
+        peticionGet.execute("http://dev.avl.webmaps.com.mx/tmp/pruebasAppLocalizacion/ubicacion.php?ubicacion=3&usuarios=3");
+
+
+
     }
 
     @Override
@@ -78,12 +96,13 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
         Dispositivos dispositivos;
         List<Dispositivos> objects;
         Context context;
-
+        ArrayList<ViewHolder> holders;
 
         public DispositivosAdapter(Context context, List<Dispositivos> objects) {
             super(context, 0, objects);
             this.context = context;
             this.objects = objects;
+            holders = new ArrayList<>();
         }
 
         @Override
@@ -117,17 +136,29 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
                 holder = (ViewHolder) convertView.getTag();
             }
 
+            holders.add(holder);
             // Lead actual.
             posicion = position;
             dispositivo = getItem(position);
 
             // Setup.
-            holder.dispositivo.setText("Dispositivo pos: " + position);
+            holder.dispositivo.setText("usuario: " + list.get(position).getIdDispositivo());
             holder.localizacion.setText("Localizacion ");
             holder.actualizar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(context, "Presiono boton " + position, Toast.LENGTH_LONG).show();
+                    HttpGet peticionGet = new HttpGet(new HttpGet.AsyncResponse() {
+                        @Override
+                        public void processFinish(String output) {
+                            holders.get(position).localizacion.setText("Localizacion " + output);
+                        }
+                    });
+                    String usuario = "";
+                    try{
+                        usuario = URLEncoder.encode(list.get(position).getIdDispositivo(), "UTF-8");
+                    }catch (Exception ex){}
+                    peticionGet.execute("http://dev.avl.webmaps.com.mx/tmp/pruebasAppLocalizacion/ubicacion.php?ubicacion=3&ultimaUbicacion=" + usuario );
                 }
             });
 

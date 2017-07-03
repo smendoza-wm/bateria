@@ -31,6 +31,7 @@ public class HttpGet extends AsyncTask<String, Void, String>{
     public String getJSON(String url, int timeout) {
         HttpURLConnection c = null;
         try {
+            System.out.println("Peticion a: " + url);
             URL u = new URL(url);
             c = (HttpURLConnection) u.openConnection();
             c.setRequestMethod("GET");
@@ -76,7 +77,7 @@ public class HttpGet extends AsyncTask<String, Void, String>{
 
     @Override
     protected String doInBackground(String... params) {
-        return getJSON("http://dev.avl.webmaps.com.mx/tmp/pruebasAppLocalizacion/ubicacion.php?ubicacion=3", 30000);
+        return getJSON(params[0], 30000);
 
     }
 
