@@ -1,50 +1,80 @@
 package com.example.saul_wm.bateria.Bateria;
 
-/*########################################################################################
-  #  @descripcion: Clase que monitorea el nivel de la bateria, y de la cual se pueden    #
-  #               obtener varias variables como tipo de conexion, historial de uso, etc. #
-  ########################################################################################*/
-
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.BatteryManager;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.example.saul_wm.bateria.BaseDatos.BaseDatos;
+import com.example.saul_wm.bateria.Utils.Constantes;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+/*###########################################################################################
+  #  @description: Clase que monitorea el nivel de la bateria, lo hace de manera dinamica   #
+  #                mediante un BroadCast Receiver. Util para disparar eventos al existir    #
+  #                un cambio en el estado de bateria: aumento/decremento en el % de pila,   #
+  #                cambio en estado de carga (cargado/descargado) y llegar al nivel de      #
+  #                bateria minima.                                                          #
+  #                Hace uso de mas recursos, por lo que se sugiere usarla solo en caso      #
+  #                necesario.                                                               #
+  #                                                                                         #
+  #                                                                                         #
+  ###########################################################################################*/
 
 public class BateriaDinamica extends BroadcastReceiver{
 
-    private int nivelMin = 20;
     private int nivelActual = 0;
 
-    private boolean esBateriaBaja;
-    private boolean estaCargando;
-    private String fuenteCarga="SinCarga";
+    private boolean bateriaBaja;
+    private boolean cargando;
+    private String fuenteCarga = "NO_CARGA";
 
+    private Context context;
+
+    private boolean banderaBateriaMin = true;
+    boolean cargandoAux = true;
 
     public static final String CARGA_USB = "USB";
     public static final String CARGA_AC = "AC";
 
+    private SQLiteDatabase db;
+
     public BateriaDinamica(Context context){
+        this.context = context;
+        /*Iniciar la base de datos*/
+        BaseDatos bdBateria = new BaseDatos(context, Constantes.NOMBRE_BD, null, Constantes.VERSION_BD);
+        db = bdBateria.getWritableDatabase();
+    }
+
+    public void iniciarRegistro(){
         context.registerReceiver(this, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+    }
+
+    public void detenerRegistro(){
+        context.unregisterReceiver(this);
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        //Agregar alguna de las funciones para disparar eventos
+        //eventoPorcBat(intent);
+        //eventoBatMin(intent);
+        eventoCambioCarga(intent);
+    }
 
-        if(intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0) != nivelActual){
-            actualizaNivelActual(intent);
-            actualizaBateriaBaja(intent);
-            actualizaEstaCargando(intent);
-            actualizaFuenteCarga(intent);
-
-            Log.d("Bateria ", ""+intent.getAction());
-            Log.d("Bateria ", ""+nivelActual);
-            Log.d("Bateria ", ""+esBateriaBaja);
-            Log.d("Bateria ", ""+estaCargando);
-            Log.d("Bateria ", ""+fuenteCarga);
-
-        }
+    private void actualizaInformacion(Intent intent){
+        actualizaNivelActual(intent);
+        actualizaBateriaBaja(intent);
+        actualizaEstaCargando(intent);
+        actualizaFuenteCarga(intent);
     }
 
     private void actualizaNivelActual(Intent intent){
@@ -52,28 +82,31 @@ public class BateriaDinamica extends BroadcastReceiver{
     }
 
     private void actualizaBateriaBaja(Intent intent){
-        if(nivelActual < nivelMin)
-            esBateriaBaja = true;
+        if(nivelActual < Constantes.BATERIA_MINIMA)
+            bateriaBaja = true;
         else
-            esBateriaBaja = false;
+            bateriaBaja = false;
     }
 
     private void actualizaEstaCargando(Intent intent){
         int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
         if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL)
-            estaCargando = true;
+            cargando = true;
         else
-            estaCargando = false;
+            cargando = false;
     }
 
     private void actualizaFuenteCarga(Intent intent){
-        if(estaCargando) {
+        if(cargando) {
             int tipoCarga = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
             if (tipoCarga == BatteryManager.BATTERY_PLUGGED_USB)
                 fuenteCarga = "USB";
-            else
+            else if(tipoCarga == BatteryManager.BATTERY_PLUGGED_AC)
                 fuenteCarga = "AC";
         }
+        else
+            fuenteCarga = "NO_CARGA";
+
     }
 
     public int getNivelActual() {
@@ -81,15 +114,80 @@ public class BateriaDinamica extends BroadcastReceiver{
     }
 
     public boolean esBateriaBaja() {
-        return esBateriaBaja;
+        return bateriaBaja;
     }
 
     public boolean estaCargando() {
-        return estaCargando;
+        return cargando;
     }
 
     public String getFuenteCarga() {
         return fuenteCarga;
     }
 
+    public void imprimeInfo(){
+        Log.d("Bateria ", "" + nivelActual);
+        Log.d("Bateria ", "" + bateriaBaja);
+        Log.d("Bateria ", "" + cargando);
+        Log.d("Bateria ", "" + fuenteCarga);
+    }
+
+    private void eventoPorcBat(Intent intent){
+        if(intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0) != nivelActual){
+            //Si el nivel de la bateria cambia de porcentaje, dispara un evento
+            actualizaInformacion(intent);
+            Toast.makeText(context, "Bateria " + nivelActual, Toast.LENGTH_SHORT).show();
+            imprimeInfo();
+        }
+    }
+
+    private void eventoBatMin(Intent intent){
+        if(intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0) < Constantes.BATERIA_MINIMA){
+            // Si el nivel de la bateria llega a un minimo, dispara un evento
+            if(banderaBateriaMin) {
+                banderaBateriaMin = false;
+                actualizaInformacion(intent);
+                Toast.makeText(context, "Bateria minima", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else
+            banderaBateriaMin = true;
+    }
+
+    private void eventoCambioCarga(Intent intent){
+        if(intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1) == BatteryManager.BATTERY_STATUS_CHARGING  )
+            cargandoAux = true;
+        else
+            cargandoAux = false;
+
+        if((cargandoAux != cargando) ){
+            //Si cambia el estado de carga (cargandose/descargandose) dispara un evento
+            actualizaInformacion(intent);
+            insertarMedicion();
+            if(cargandoAux) {
+                Toast.makeText(context, "Cargando el dispositivo", Toast.LENGTH_SHORT).show();
+            }
+            else
+                Toast.makeText(context, "Bateria descargandose", Toast.LENGTH_SHORT ).show();
+        }
+    }
+
+    private void insertarMedicion(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date date = new Date();
+
+        ContentValues valores = new ContentValues();
+        valores.put("c_bateria_fecha",  dateFormat.format(date) );
+        valores.put("n_bateria_porcentaje", nivelActual);
+        valores.put("n_bateria_cargando", cargando);
+        valores.put("t_bateria_fuenteCarga", fuenteCarga);
+
+        try {
+            db.insert("dat_bateria", null, valores);
+            System.out.println("Insercion correcta");
+        } catch (Exception e) {
+            System.out.println("Error al insertar");
+        }
+    }
 }

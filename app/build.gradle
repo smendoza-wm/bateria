@@ -26,5 +26,14 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    //Obtener procesos corriendo en background
+    compile 'com.jaredrummler:android-processes:1.0.9'
+    //Servicios de localizacion de google
+    compile 'com.google.android.gms:play-services-location:11.0.0'
+    //Retrofit para HTTP y REST
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    //Manejo de JSON
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.google.code.gson:gson:2.7'
     testCompile 'junit:junit:4.12'
 }
