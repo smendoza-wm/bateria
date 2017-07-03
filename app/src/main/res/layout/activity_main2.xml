@@ -4,20 +4,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity"
-    android:weightSum="1">
+   >
 
-
-    <TextView
-        android:id="@+id/tv_result"
+    <ListView
+        android:id="@+id/lv_dispositivos"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.70"
-        android:text="TextView" />
+        android:layout_height="match_parent"
+        android:drawSelectorOnTop="true"
+        android:divider="@null"
+        tools:listitem="@layout/lista_dispositivos" />
 
-    <Button
-        android:id="@+id/btn_get"
-        android:layout_width="161dp"
-        android:layout_height="wrap_content"
-        android:text="Obtener datos"
-        android:layout_weight="0.01" />
+
+
+
 </LinearLayout>
