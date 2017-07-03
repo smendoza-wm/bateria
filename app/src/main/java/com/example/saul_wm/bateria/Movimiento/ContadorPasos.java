@@ -41,6 +41,7 @@ public class ContadorPasos extends SensorMovimiento {
     public void onSensorChanged(SensorEvent event) {
         if(event.sensor.getType() == Sensor.TYPE_STEP_DETECTOR){
             pasos++;
+            System.out.println("Pasos: " + pasos);
             if(pasos % 10 == 0){
                 gps.iniciarSimple();
                 System.out.println("Latitud: " + gps.getLatitud());
