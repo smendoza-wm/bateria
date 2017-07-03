@@ -30,6 +30,8 @@ import com.example.saul_wm.bateria.Servicios.Localizador;
 import com.example.saul_wm.bateria.Telefono.HistorialLlamadas;
 import com.example.saul_wm.bateria.Telefono.HistorialMjs;
 import com.example.saul_wm.bateria.Utils.Constantes;
+import com.example.saul_wm.bateria.fcm.FCMInstanceIdService;
+import com.example.saul_wm.bateria.fcm.FCMService;
 
 import org.w3c.dom.Text;
 
@@ -94,6 +96,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         cursor.close();
         db.close();
+
+
+        /*Intent id = new Intent(this, FCMInstanceIdService.class);
+        startService(id);
+
+        Intent service = new Intent(this, FCMService.class);
+        startService(service);*/
+
+
+
         /*locJSON = new LocalizacionJSON();
         locJSON.setFecha("2017-06-28");
         locJSON.setHora("12:00");
