@@ -15,6 +15,9 @@ public class BaseDatos extends SQLiteOpenHelper{
                                             "n_bateria_porcentaje INTEGER," +
                                             "n_bateria_cargando INTEGER, " +   /*Los booleanos se almacenan como integers*/
                                             "t_bateria_fuenteCarga TEXT )";
+    private static final String dat_dispositivo = "CREATE TABLE dat_dispositivo(" +
+                                                  "t_dispositivo_id TEXT PRIMARY KEY" +
+                                             ")";
     /*Fin script para crear la base de datos*/
 
 
@@ -27,11 +30,13 @@ public class BaseDatos extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(dat_bateria);
+        sqLiteDatabase.execSQL(dat_dispositivo);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL(dat_bateria);
+        sqLiteDatabase.execSQL(dat_dispositivo);
     }
 
     @Override
