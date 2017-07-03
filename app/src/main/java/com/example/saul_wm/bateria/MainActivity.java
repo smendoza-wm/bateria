@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.saul_wm.bateria.BaseDatos.BaseDatos;
 import com.example.saul_wm.bateria.Bateria.BateriaDinamica;
@@ -29,6 +30,8 @@ import com.example.saul_wm.bateria.Servicios.Localizador;
 import com.example.saul_wm.bateria.Telefono.HistorialLlamadas;
 import com.example.saul_wm.bateria.Telefono.HistorialMjs;
 import com.example.saul_wm.bateria.Utils.Constantes;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -53,6 +56,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button iniciar;
     private Button finalizar;
 
+    private EditText idDispositivo;
+    private Button guardarNombre;
+    private Button verUbicaciones;
+
     private Orientacion orientacion;
     private Acelerometro acelerometro;
     private ContadorPasos contadorPasos;
@@ -64,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private APIService mAPIService;
     private LocalizacionJSON locJSON;
 
+    Intent localizador;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,13 +83,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         db = bdBateria.getWritableDatabase();
         Cursor cursor = db.query("dat_dispositivo", null, null, null, null, null, null);
         cursor.moveToNext();
-        if(cursor.getCount() < 1){
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("t_dispositivo_id", "Andrea");
-            db.insert("dat_dispositivo", null, contentValues);
+        if(cursor.getCount() > 0){
+            idDispositivo.setText(cursor.getString(1));
+            idDispositivo.setEnabled(false);
+            guardarNombre.setVisibility(View.GONE);
+            localizador = new Intent(this, Localizador.class);
+            startService(localizador);
+
         }
-        else
-            tv1.setText(cursor.getString(0));
+
         cursor.close();
         db.close();
         /*locJSON = new LocalizacionJSON();
@@ -101,8 +112,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //getHistorialMensajes();
 
         //localizacion = new Localizacion(this, this, tv9, tv10);
-        Intent localizador = new Intent(this, Localizador.class);
-        startService(localizador);
 
 
         //iniciarPantalla();
@@ -138,8 +147,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initComponents(){
+
+        idDispositivo = (EditText) findViewById(R.id.et_idDispositivo);
+        guardarNombre = (Button)findViewById(R.id.btn_nombre);
+        verUbicaciones = (Button)findViewById(R.id.btn_ubicaciones);
+
+        guardarNombre.setOnClickListener(this);
+        verUbicaciones.setOnClickListener(this);
+
        // tv_nivelBateria = (TextView) findViewById(R.id.tv_nivelBateria);
-        tv1 = (EditText) findViewById(R.id.tv1);
+       /* tv1 = (EditText) findViewById(R.id.tv1);
         tv2 = (EditText) findViewById(R.id.tv2);
         tv3 = (EditText) findViewById(R.id.tv3);
         tv4 = (EditText) findViewById(R.id.tv4);
@@ -154,24 +171,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         finalizar = (Button) findViewById(R.id.btn_finalizar);
 
         iniciar.setOnClickListener(this);
-        finalizar.setOnClickListener(this);
+        finalizar.setOnClickListener(this);*/
     }
 
 
     @Override
     public void onClick(View v) {
         switch(v.getId()){
-            case R.id.btn_iniciar:
+            /*case R.id.btn_iniciar:
                 /*orientacion.iniciar();
                 contadorPasos.iniciar();
-                acelerometro.iniciar();*/
+                acelerometro.iniciar();
                 //sendPost("Saul", locJSON);
                 break;
 
             case R.id.btn_finalizar:
                /* orientacion.detener();
                 contadorPasos.detener();
-                acelerometro.detener();*/
+                acelerometro.detener();
+
+                break;*/
+            case R.id.btn_nombre:
+                BaseDatos bdBateria = new BaseDatos(this, Constantes.NOMBRE_BD, null, Constantes.VERSION_BD);
+                db = bdBateria.getWritableDatabase();
+                Cursor cursor = db.query("dat_dispositivo", null, null, null, null, null, null);
+                cursor.moveToNext();
+                if(cursor.getCount() < 1){
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("t_dispositivo_nombre", idDispositivo.getText().toString());
+                    db.insert("dat_dispositivo", null, contentValues);
+                }
+
+                Toast.makeText(this, "El id del dispositivo se ha actualizado", Toast.LENGTH_LONG).show();
+                localizador = new Intent(this, Localizador.class);
+                startService(localizador);
+                cursor.close();
+                db.close();
+
+
+                break;
+            case R.id.btn_ubicaciones:
                 Intent peticionGet = new Intent(this, Main2Activity.class);
                 startActivity(peticionGet);
                 break;

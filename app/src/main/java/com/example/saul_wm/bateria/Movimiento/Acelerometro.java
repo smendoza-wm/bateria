@@ -106,17 +106,17 @@ public class Acelerometro implements SensorEventListener{
 
                 float promedio = ( Math.abs(acelX) + Math.abs(acelY) + Math.abs(acelZ) ) / 3;
                 historialAceleracion.add(promedio);
-                if(historialAceleracion.size() == 10) {
+                if(historialAceleracion.size() == 20) {
                     float prom = 0;
                     for (int i = 0; i < historialAceleracion.size(); i++){
                         prom += historialAceleracion.get(i);
                     }
-                    prom /= 10;
+                    prom /= 20;
                     System.out.println("EL PROMEDIO DE 10 MEDICIONES FUE: " + prom);
                     //Toast.makeText(context,"EL PROMEDIO DE 10 MEDICIONES FUE: " + prom, Toast.LENGTH_SHORT).show();
                     historialAceleracion.clear();
 
-                    if(prom > 0.5){
+                    if(prom > 0.65){
                         gps.setIdDispositivo(idDispositivo);
                         gps.iniciarSimple();
                         System.out.println("Latitud: " + gps.getLatitud());

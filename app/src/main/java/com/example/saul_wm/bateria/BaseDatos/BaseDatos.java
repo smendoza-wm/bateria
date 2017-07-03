@@ -16,8 +16,8 @@ public class BaseDatos extends SQLiteOpenHelper{
                                             "n_bateria_cargando INTEGER, " +   /*Los booleanos se almacenan como integers*/
                                             "t_bateria_fuenteCarga TEXT )";
     private static final String dat_dispositivo = "CREATE TABLE dat_dispositivo(" +
-                                                  "t_dispositivo_id TEXT PRIMARY KEY" +
-                                             ")";
+                                                  "n_dispositivo_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                             "t_dispositivo_nombre TEXT)";
     /*Fin script para crear la base de datos*/
 
 

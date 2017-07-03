@@ -85,7 +85,7 @@ public class Localizador extends Service{
         SQLiteDatabase db = bdBateria.getWritableDatabase();
         Cursor cursor = db.query("dat_dispositivo", null, null, null, null, null, null);
         cursor.moveToNext();
-        String id = cursor.getString(0);
+        String id = cursor.getString(1);
         cursor.close();
         db.close();
         return id;

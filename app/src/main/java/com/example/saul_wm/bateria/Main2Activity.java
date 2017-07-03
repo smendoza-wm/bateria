@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import org.w3c.dom.Text;
 
 import java.net.URLEncoder;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,22 +49,26 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
                 usuarios = output;
                 //tv.setText(output);
                 System.out.println("Resultado = " + output);
-                String users [] = usuarios.split(";");
+
+                list = new ArrayList<>();
+                String usuario_ubicacion [] = output.split(",");
+
+                for(int i = 1; i < usuario_ubicacion.length; i++){
+
+                    String nombre_datos[] = usuario_ubicacion[i].split(";");
+                    System.out.println("Nombre_datos: " + nombre_datos[1]);
+                    Dispositivos dis = new Dispositivos(nombre_datos[0], nombre_datos[1]);
+                    list.add(dis);
+                }
 
                 ListView lv = (ListView) findViewById(R.id.lv_dispositivos); //Se relaciona el ListView donde van a estar los botones
-                list = new ArrayList<>();
-                Dispositivos dis = new Dispositivos(users[0], "localizacion");
-                Dispositivos dis2 = new Dispositivos(users[1], "loc");
-
-                list.add(dis);
-                list.add(dis2);
 
                 DispositivosAdapter adapter = new DispositivosAdapter(getApplicationContext(), list); //Se inicializa el adaptador
                 if (lv != null)
                     lv.setAdapter(adapter);//Se rellena el listView con los botones de los niños
             }
         });
-        peticionGet.execute("http://dev.avl.webmaps.com.mx/tmp/pruebasAppLocalizacion/ubicacion.php?ubicacion=3&usuarios=3");
+        peticionGet.execute("http://dev.avl.webmaps.com.mx/tmp/pruebasAppLocalizacion/ubicacion.php?ubicacion=3&infoGeneral=1");
 
 
 
@@ -143,7 +148,7 @@ public class Main2Activity extends AppCompatActivity implements View.OnClickList
 
             // Setup.
             holder.dispositivo.setText("usuario: " + list.get(position).getIdDispositivo());
-            holder.localizacion.setText("Localizacion ");
+            holder.localizacion.setText(list.get(position).getUbicacion());
             holder.actualizar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

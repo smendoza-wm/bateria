@@ -1,9 +1,60 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp" >
+
+    <TextView
+        android:id="@+id/s"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="62dp"
+        android:text="Nombre del dispositivo"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/et_idDispositivo"
+        android:layout_alignStart="@+id/et_idDispositivo" />
+
+    <EditText
+        android:id="@+id/et_idDispositivo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text=""
+        android:layout_below="@+id/s"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp" />
+
+    <Button
+        android:id="@+id/btn_nombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_idDispositivo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="41dp"
+        android:text="Guardar nombre" />
+
+    <Button
+        android:id="@+id/btn_ubicaciones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btn_nombre"
+        android:layout_alignStart="@+id/btn_nombre"
+        android:layout_below="@+id/btn_nombre"
+        android:layout_marginTop="24dp"
+        android:text="Ver ubicaciones" />
+</RelativeLayout>
+
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
+
+
+
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -12,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <!-- Content here -->
+
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
@@ -151,3 +202,4 @@
 
 
 </LinearLayout>
+-->
