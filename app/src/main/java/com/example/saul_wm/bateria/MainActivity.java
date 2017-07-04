@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void iniciarAcelerometro(){
-        acelerometro = new Acelerometro(this, tv5, tv6, tv7, tv8);
+        acelerometro = new Acelerometro(this);
     }
 
     public void getHistorialMensajes(){

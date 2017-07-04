@@ -12,7 +12,7 @@ import com.example.saul_wm.bateria.Utils.Constantes;
   #  @author:      Saul Mendoza <saul.mendoza@webmaps.com.mx>                               #
   #  @created:     30/06/2017                                                               #
   #  @description: Clase que monitorea el nivel de la bateria, lo hace de manera estatica,  #
-  #                es decir, solo obtiene la informacion de la bateria cuando se crea un    #
+  #                solo obtiene la informacion de la bateria cuando se crea un              #
   #                un objeto, y no vuelve a actualizar su informacion, a menos que se llame #
   #                al metodo actualizarInformacion();                                       #
   #  @copyright:   Copyright (c) 2017, WebMaps                                              #

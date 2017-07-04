@@ -13,6 +13,7 @@ public class FCMService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        //System.out.println("mensaje de: " + remoteMessage.getFrom());
         System.out.println("Mensaje Recibido");
     }
 

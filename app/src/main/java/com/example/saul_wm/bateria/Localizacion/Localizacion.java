@@ -7,6 +7,7 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -14,6 +15,9 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.saul_wm.bateria.Alarma.Alarma;
+import com.example.saul_wm.bateria.Http.HttpPost;
+import com.example.saul_wm.bateria.Modelo.KeepAlive;
 import com.example.saul_wm.bateria.Utils.Constantes;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiActivity;
@@ -30,6 +34,10 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Localizacion implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private GoogleApiClient googleApiClient;
@@ -43,19 +51,33 @@ public class Localizacion implements GoogleApiClient.ConnectionCallbacks, Google
     private Location lastLocation;
     private LocationRequest locationRequest;
 
-    public Localizacion(Context context, Activity activity, TextView tv1, TextView tv2) {
-        this.context = context;
-        this.activity = activity;
-        this.tv1 = tv1;
-        this.tv2 = tv2;
+    private Alarma alarma;
 
+    private KeepAlive keepAlive;
+
+    private String idDispositivo ="";
+
+    public long getUltimaHoraLocalizacion() {
+        return ultimaHoraLocalizacion;
+    }
+
+    private long ultimaHoraLocalizacion = 0;
+
+    public void setIdDispositivo(String idDispositivo) {
+        this.idDispositivo = idDispositivo;
+    }
+
+    public Localizacion(Context context) {
+        this.context = context;
+        keepAlive = KeepAlive.getInstance();
         googleApiClient = new GoogleApiClient.Builder(context)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
         configurarOpciones();
-
+        alarma = new Alarma();
+        alarma.setAlarm(context);
 
     }
 
@@ -90,7 +112,7 @@ public class Localizacion implements GoogleApiClient.ConnectionCallbacks, Google
                             Log.d("satus", "Los ajustes de ubicación no satisfacen la configuración. " +
                                     "Se mostrará un diálogo de ayuda.");
                             status.startResolutionForResult(
-                                    activity,
+                                    (Activity)context,
                                     Constantes.REQUEST_CHECK_SETTINGS);
 
                         } catch (Exception e) {
@@ -100,7 +122,6 @@ public class Localizacion implements GoogleApiClient.ConnectionCallbacks, Google
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                         Log.d("status", "No se pueden guardar los cambios");
                         break;
-
                 }
             }
         });
@@ -109,6 +130,9 @@ public class Localizacion implements GoogleApiClient.ConnectionCallbacks, Google
 
     public void iniciar() {
         googleApiClient.connect();
+        //alarma = new Alarma();
+        //alarma.setLoc(this);
+        //alarma.setAlarm(context, this);
     }
 
     public void finalzar() {
@@ -141,14 +165,15 @@ public class Localizacion implements GoogleApiClient.ConnectionCallbacks, Google
                 // por si rechazó los permisos anteriormente
             } else {
                 ActivityCompat.requestPermissions(
-                        activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        (Activity)context , new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         Constantes.REQUEST_LOCATION);
             }
         } else {
             lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+            System.out.println("peticion de localizacion");
             if (lastLocation != null) {
-                tv1.setText(String.valueOf(lastLocation.getLatitude()));
-                tv2.setText(String.valueOf(lastLocation.getLongitude()));
+                //tv1.setText(String.valueOf(lastLocation.getLatitude()));
+                //tv2.setText(String.valueOf(lastLocation.getLongitude()));
             } else {
                 Toast.makeText(context, "Ubicación no encontrada", Toast.LENGTH_LONG).show();
             }
@@ -157,11 +182,17 @@ public class Localizacion implements GoogleApiClient.ConnectionCallbacks, Google
 
     @Override
     public void onLocationChanged(Location location) {
+        ultimaHoraLocalizacion = System.currentTimeMillis();
+        keepAlive.setUltimaHoraActualizacion(ultimaHoraLocalizacion);
         Log.d("localizacion", String.format("Nueva ubicación: (%s, %s)",
                 location.getLatitude(), location.getLongitude()));
         lastLocation = location;
-        tv1.setText(String.valueOf(lastLocation.getLatitude()));
-        tv2.setText(String.valueOf(lastLocation.getLongitude()));
+        System.out.println("Cambie de locacalizacion");
+        //tv1.setText(String.valueOf(lastLocation.getLatitude()));
+        //tv2.setText(String.valueOf(lastLocation.getLongitude()));
+        String [] datos = {"http://dev.avl.webmaps.com.mx/tmp/pruebasAppLocalizacion/ubicacion.php", lastLocation.getLatitude()
+                +"", lastLocation.getLongitude()+"", idDispositivo};
+        new HttpPost().execute(datos);
     }
 
     private void startLocationUpdates() {
@@ -179,5 +210,19 @@ public class Localizacion implements GoogleApiClient.ConnectionCallbacks, Google
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 googleApiClient, locationRequest, this);
 
+    }
+
+    private String getFecha(){
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String fecha = dateFormat.format(date);
+        return fecha;
+    }
+
+    private String getHora(){
+        Date date = new Date();
+        DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
+        String hora = hourFormat.format(date);
+        return hora;
     }
 }

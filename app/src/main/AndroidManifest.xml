@@ -4,6 +4,7 @@
 
     <!-- Permisos para localizacion -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <!-- Permisos para leer historial de llamadas y mensajes -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -12,6 +13,8 @@
 
     <!-- Permisos para conectarse a internet -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- Permisos para mantener el dispositivo despierto -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -51,16 +54,14 @@
 
         <service
             android:name=".fcm.FCMService"
-            android:enabled="true"
-            android:exported="true">
+            >
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <service
             android:name=".fcm.FCMInstanceIdService"
-            android:enabled="true"
-            android:exported="true">
+            >
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>

@@ -12,30 +12,10 @@ import com.example.saul_wm.bateria.Localizacion.GPS;
 public class ContadorPasos extends SensorMovimiento {
 
     private int pasos = 0;
-    private GPS gps;
-
-    private Sensor contadorPasos;
-
-    private EditText tv;
 
     public ContadorPasos(Context context){
-        super(context);
-        contadorPasos = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-        gps = new GPS(context);
-
-        this.tv = tv;
+        super(context, Sensor.TYPE_STEP_DETECTOR, SensorManager.SENSOR_DELAY_NORMAL);
     }
-
-    @Override
-    public void iniciar() {
-        sensorManager.registerListener(this, contadorPasos, SensorManager.SENSOR_DELAY_UI);
-    }
-
-    @Override
-    public void detener() {
-        sensorManager.unregisterListener(this);
-    }
-
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -47,7 +27,6 @@ public class ContadorPasos extends SensorMovimiento {
                 System.out.println("Latitud: " + gps.getLatitud());
                 System.out.println("Longitud: " + gps.getLongitud());
             }
-            //tv.setText(pasos + "");
         }
     }
 

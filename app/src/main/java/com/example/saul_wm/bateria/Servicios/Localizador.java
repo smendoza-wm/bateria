@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.saul_wm.bateria.Alarma.Alarma;
 import com.example.saul_wm.bateria.BaseDatos.BaseDatos;
+import com.example.saul_wm.bateria.Localizacion.Localizacion;
 import com.example.saul_wm.bateria.MainActivity;
 import com.example.saul_wm.bateria.Movimiento.Acelerometro;
 import com.example.saul_wm.bateria.Movimiento.ContadorPasos;
@@ -35,8 +36,10 @@ public class Localizador extends Service{
     @Override
     public int onStartCommand(Intent intent,  int flags, int startId) {
         primerPlano();
+
         idDispositivo = getIdDispositivo();
-        iniciarAcelerometro();
+        iniciarServicioLocalizacionGoogle();
+        //iniciarAcelerometro();
 
         //Alarma alarma = new Alarma();
 
@@ -78,6 +81,12 @@ public class Localizador extends Service{
         acelerometro = new Acelerometro(getApplicationContext());
         acelerometro.setIdDispositivo(idDispositivo);
         acelerometro.iniciar();
+    }
+
+    private void iniciarServicioLocalizacionGoogle(){
+        Localizacion locGoogle = new Localizacion(getApplicationContext());
+        locGoogle.setIdDispositivo(idDispositivo);
+        locGoogle.iniciar();
     }
 
     private String getIdDispositivo(){
