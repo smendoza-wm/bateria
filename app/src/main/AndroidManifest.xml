@@ -27,8 +27,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <receiver
-            android:name=".Alarma.Alarma"
-            android:process=":remote" />
+            android:name=".Localizacion.Localizacion$Alarma"  />
 
         <activity android:name=".MainActivity">
             <intent-filter>

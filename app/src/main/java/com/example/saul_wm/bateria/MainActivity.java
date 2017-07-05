@@ -81,6 +81,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         initComponents();
 
+
+
+
         BaseDatos bdBateria = new BaseDatos(this, Constantes.NOMBRE_BD, null, Constantes.VERSION_BD);
         db = bdBateria.getWritableDatabase();
         Cursor cursor = db.query("dat_dispositivo", null, null, null, null, null, null);
@@ -96,6 +99,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         cursor.close();
         db.close();
+
+
 
 
         /*Intent id = new Intent(this, FCMInstanceIdService.class);
@@ -217,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this, "El id del dispositivo se ha actualizado", Toast.LENGTH_LONG).show();
                 localizador = new Intent(this, Localizador.class);
                 startService(localizador);
+                guardarNombre.setVisibility(View.GONE);
                 cursor.close();
                 db.close();
 
@@ -301,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case Constantes.REQUEST_CHECK_SETTINGS:
                 switch (resultCode) {
                     case Activity.RESULT_OK:
-                        Log.d("loc", "El usuario permitió el cambio de ajustes de ubicación.");
+                        Log.d("loc", "El usuario permitió el cambio de ajustes de ubicación. ");
                         localizacion.procesarLocalizacion();
                         break;
                     case Activity.RESULT_CANCELED:

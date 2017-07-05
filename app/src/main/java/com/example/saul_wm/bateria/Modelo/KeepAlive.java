@@ -1,14 +1,21 @@
 package com.example.saul_wm.bateria.Modelo;
 
-/**
- * Created by Saul-WM on 04/07/2017.
- */
-
 public class KeepAlive {
-    private static final KeepAlive ourInstance = new KeepAlive();
+    private static KeepAlive instancia = null;
 
     public static KeepAlive getInstance() {
-        return ourInstance;
+        if (instancia == null) {
+            // Sólo se accede a la zona sincronizada
+            // cuando la instancia no está creada
+            synchronized(KeepAlive.class) {
+                // En la zona sincronizada sería necesario volver
+                // a comprobar que no se ha creado la instancia
+                if (instancia == null) {
+                    instancia = new KeepAlive();
+                }
+            }
+        }
+        return instancia;
     }
 
     private KeepAlive() {
@@ -34,3 +41,4 @@ public class KeepAlive {
     }
 
 }
+

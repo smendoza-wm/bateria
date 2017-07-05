@@ -2,11 +2,19 @@ package com.example.saul_wm.bateria.Localizacion;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,7 +23,8 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.saul_wm.bateria.Alarma.Alarma;
+
+import com.example.saul_wm.bateria.BaseDatos.BaseDatos;
 import com.example.saul_wm.bateria.Http.HttpPost;
 import com.example.saul_wm.bateria.Modelo.KeepAlive;
 import com.example.saul_wm.bateria.Utils.Constantes;
@@ -37,31 +46,33 @@ import org.w3c.dom.Text;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Localizacion implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private GoogleApiClient googleApiClient;
-    private Context context;
+    protected Context context;
+    private SQLiteDatabase db;
 
     private TextView tv1;
     private TextView tv2;
 
     private Activity activity;
 
-    private Location lastLocation;
+    private static Location lastLocation;
     private LocationRequest locationRequest;
 
-    private Alarma alarma;
+    private Localizacion.Alarma alarma;
 
     private KeepAlive keepAlive;
 
-    private String idDispositivo ="";
+    private static String idDispositivo ="";
 
     public long getUltimaHoraLocalizacion() {
         return ultimaHoraLocalizacion;
     }
 
-    private long ultimaHoraLocalizacion = 0;
+    private static long ultimaHoraLocalizacion = 0;
 
     public void setIdDispositivo(String idDispositivo) {
         this.idDispositivo = idDispositivo;
@@ -69,17 +80,17 @@ public class Localizacion implements GoogleApiClient.ConnectionCallbacks, Google
 
     public Localizacion(Context context) {
         this.context = context;
-        keepAlive = KeepAlive.getInstance();
+        alarma = new Alarma();
+        alarma.setAlarm(context);
         googleApiClient = new GoogleApiClient.Builder(context)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
         configurarOpciones();
-        alarma = new Alarma();
-        alarma.setAlarm(context);
-
     }
+
+    public Localizacion(){}
 
     private void configurarOpciones() {
         locationRequest = new LocationRequest()
@@ -130,9 +141,8 @@ public class Localizacion implements GoogleApiClient.ConnectionCallbacks, Google
 
     public void iniciar() {
         googleApiClient.connect();
-        //alarma = new Alarma();
-        //alarma.setLoc(this);
-        //alarma.setAlarm(context, this);
+
+
     }
 
     public void finalzar() {
@@ -182,12 +192,10 @@ public class Localizacion implements GoogleApiClient.ConnectionCallbacks, Google
 
     @Override
     public void onLocationChanged(Location location) {
-        ultimaHoraLocalizacion = System.currentTimeMillis();
-        keepAlive.setUltimaHoraActualizacion(ultimaHoraLocalizacion);
-        Log.d("localizacion", String.format("Nueva ubicación: (%s, %s)",
-                location.getLatitude(), location.getLongitude()));
+        //insertarMedicion();
         lastLocation = location;
         System.out.println("Cambie de locacalizacion");
+        ultimaHoraLocalizacion = System.currentTimeMillis();
         //tv1.setText(String.valueOf(lastLocation.getLatitude()));
         //tv2.setText(String.valueOf(lastLocation.getLongitude()));
         String [] datos = {"http://dev.avl.webmaps.com.mx/tmp/pruebasAppLocalizacion/ubicacion.php", lastLocation.getLatitude()
@@ -212,17 +220,53 @@ public class Localizacion implements GoogleApiClient.ConnectionCallbacks, Google
 
     }
 
-    private String getFecha(){
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String fecha = dateFormat.format(date);
-        return fecha;
-    }
 
-    private String getHora(){
-        Date date = new Date();
-        DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
-        String hora = hourFormat.format(date);
-        return hora;
+    public static class Alarma extends BroadcastReceiver
+    {
+
+        private  long horaActual = 0;
+
+        public Alarma(){}
+
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
+            wl.acquire();
+            onAlarm();
+            wl.release();
+        }
+
+        public void setAlarm(Context context)
+        {
+
+            AlarmManager am =(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+            Intent i = new Intent(context, Alarma.class);
+            PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
+            am.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), Constantes.INTERVALO_ALARMA , pi); // Millisec * Second * Minute
+
+        }
+
+        public void cancelAlarm(Context context)
+        {
+            Intent intent = new Intent(context, Alarma.class);
+            PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            alarmManager.cancel(sender);
+        }
+
+        private void onAlarm(){
+            horaActual = System.currentTimeMillis();
+            if(horaActual - ultimaHoraLocalizacion > Constantes.INTERVALO_KEEP_ALIVE){
+                String [] datos = {"http://dev.avl.webmaps.com.mx/tmp/pruebasAppLocalizacion/ubicacion.php", lastLocation.getLatitude()
+                        +"", lastLocation.getLongitude()+"", idDispositivo};
+                new HttpPost().execute(datos);
+                System.out.println("ULTIMA HORA DE ACTUaLIZACION DESDE ALARMA: " + ultimaHoraLocalizacion + "Voy a mandar un keep-alive");
+            }
+            //System.out.println("ULTIMA HORA DE ACTUaLIZACION DESDE ALARMA: " + ultimaHoraLocalizacion );
+        }
+
+
     }
 }

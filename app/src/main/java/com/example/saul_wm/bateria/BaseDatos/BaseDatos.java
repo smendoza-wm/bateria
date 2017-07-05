@@ -17,7 +17,8 @@ public class BaseDatos extends SQLiteOpenHelper{
                                             "t_bateria_fuenteCarga TEXT )";
     private static final String dat_dispositivo = "CREATE TABLE dat_dispositivo(" +
                                                   "n_dispositivo_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                                             "t_dispositivo_nombre TEXT)";
+                                             "t_dispositivo_nombre TEXT, " +
+                                             "t_dispositivo_ultimaActualizacion TEXT)";
     /*Fin script para crear la base de datos*/
 
 
