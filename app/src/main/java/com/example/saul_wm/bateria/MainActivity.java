@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button iniciar;
     private Button finalizar;
+    private Button mapa;
 
     private EditText idDispositivo;
     private Button guardarNombre;
@@ -92,8 +93,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             idDispositivo.setText(cursor.getString(1));
             idDispositivo.setEnabled(false);
             guardarNombre.setVisibility(View.GONE);
-            localizador = new Intent(this, Localizador.class);
-            startService(localizador);
+            //localizador = new Intent(this, Localizador.class);
+            //startService(localizador);
 
         }
 
@@ -168,9 +169,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         idDispositivo = (EditText) findViewById(R.id.et_idDispositivo);
         guardarNombre = (Button)findViewById(R.id.btn_nombre);
         verUbicaciones = (Button)findViewById(R.id.btn_ubicaciones);
+        mapa = (Button) findViewById(R.id.btn_mapa);
+
 
         guardarNombre.setOnClickListener(this);
         verUbicaciones.setOnClickListener(this);
+        mapa.setOnClickListener(this);
 
        // tv_nivelBateria = (TextView) findViewById(R.id.tv_nivelBateria);
        /* tv1 = (EditText) findViewById(R.id.tv1);
@@ -208,6 +212,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 acelerometro.detener();
 
                 break;*/
+
+            case R.id.btn_mapa:
+                Intent mapa = new Intent(this, MapsActivity.class);
+                startActivity(mapa
+                );
+                break;
             case R.id.btn_nombre:
                 BaseDatos bdBateria = new BaseDatos(this, Constantes.NOMBRE_BD, null, Constantes.VERSION_BD);
                 db = bdBateria.getWritableDatabase();
