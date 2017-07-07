@@ -3,13 +3,10 @@ package com.example.saul_wm.bateria.Servicios;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 
@@ -26,6 +23,7 @@ public class Localizador extends Service{
     private static final String ACTION_STOP_SERVICE = "stop";
     private ContadorPasos contadorPasos;
     private Acelerometro acelerometro;
+    private Localizacion locGoogle;
 
     private String idDispositivo;
 
@@ -36,14 +34,17 @@ public class Localizador extends Service{
     }
 
 
-
     @Override
     public int onStartCommand(Intent intent,  int flags, int startId) {
-        if (ACTION_STOP_SERVICE.equals(intent.getAction())) {
+        if(intent != null) {
+            if (ACTION_STOP_SERVICE.equals(intent.getAction())) {
 
-            NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancel(1);
-            stopSelf();
+                NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.cancel(1);
+                locGoogle.finalzar();
+
+                stopSelf();
+            }
         }
         primerPlano();
 
@@ -101,7 +102,7 @@ public class Localizador extends Service{
     }
 
     private void iniciarServicioLocalizacionGoogle(){
-        Localizacion locGoogle = new Localizacion(getApplicationContext());
+        locGoogle = new Localizacion(getApplicationContext());
         locGoogle.setIdDispositivo(idDispositivo);
         locGoogle.iniciar();
     }
@@ -117,10 +118,4 @@ public class Localizador extends Service{
         return id;
     }
 
-    protected BroadcastReceiver stopServiceReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            stopSelf();
-        }
-    };
-}
+   }

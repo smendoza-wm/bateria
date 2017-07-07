@@ -50,8 +50,8 @@ public class BateriaDinamica extends BroadcastReceiver{
     public BateriaDinamica(Context context){
         this.context = context;
         /*Iniciar la base de datos*/
-        BaseDatos bdBateria = new BaseDatos(context, Constantes.NOMBRE_BD, null, Constantes.VERSION_BD);
-        db = bdBateria.getWritableDatabase();
+
+
     }
 
     public void iniciarRegistro(){

@@ -147,6 +147,7 @@ public class Localizacion implements GoogleApiClient.ConnectionCallbacks, Google
 
     public void finalzar() {
         googleApiClient.disconnect();
+        alarma.cancelAlarm(context);
     }
 
     @Override
